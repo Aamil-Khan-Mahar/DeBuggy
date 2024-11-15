@@ -1,4 +1,4 @@
-# Correct Code
+# Buggy Code
 
 class RelativeGrader:
     def __init__(self, students):
