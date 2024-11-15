@@ -1,56 +1,64 @@
-import unittest
-import numpy as np
-import tensorflow as tf
-from Code4Correct import CNNModel  # Importing CNNModel from Code4Correct.py
+import sys
+import os
+import inspect
 
-class TestCNNModel(unittest.TestCase):
-    def setUp(self):
-        # Define input shape and number of classes
-        self.input_shape = (28, 28, 1)  # Example: Grayscale images of size 28x28
-        self.num_classes = 10  # Example: 10 classes for classification
+def compare_functions():
+    """
+    Compares two files containing a CNNModel class:
+    - Checks if function names (including __init__) match.
+    - Checks if function implementations match.
+    Returns True if both match; False otherwise.
+    """
+    try:
+        # test CNNModel class
         
-        # Initialize the CNNModel
-        self.model = CNNModel(self.input_shape, self.num_classes)
+        correct_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-    def test_model_compilation(self):
-        # Test if the model compiles successfully
-        try:
-            self.model.compile_model()
-        except Exception as e:
-            self.fail(f"Model compilation failed with error: {e}")
+        sys.path.append(correct_path)
+        from Correct import Code1Correct as correct
+        sys.path.remove(correct_path)
 
-    def test_model_training(self):
-        # Generate synthetic training data
-        train_images = np.random.rand(100, 28, 28, 1).astype('float32')  # 100 random images
-        train_labels = np.random.randint(0, 10, 100).astype('int32')  # 100 random labels
+        sys.path.append(buggy_path)
+        from Buggy import Code1Buggy as buggy
+        sys.path.remove(buggy_path)
         
-        # Compile the model
-        self.model.compile_model()
+        correct_functions = inspect.getmembers(correct.CNNModel, inspect.isfunction)
+        buggy_functions = inspect.getmembers(buggy.CNNModel, inspect.isfunction)
 
-        # Test if the model trains successfully
-        try:
-            self.model.train_model(train_images, train_labels, epochs=1)
-        except Exception as e:
-            self.fail(f"Model training failed with error: {e}")
+        # Check if the number of functions is the same
+        if len(correct_functions) != len(buggy_functions):
+            print("Different number of functions in CNNModel class.")
+            return False
 
-    def test_model_evaluation(self):
-        # Generate synthetic test data
-        test_images = np.random.rand(20, 28, 28, 1).astype('float32')  # 20 random images
-        test_labels = np.random.randint(0, 10, 20).astype('int32')  # 20 random labels
-        
-        # Compile and train the model
-        self.model.compile_model()
-        train_images = np.random.rand(100, 28, 28, 1).astype('float32')  # 100 random images
-        train_labels = np.random.randint(0, 10, 100).astype('int32')  # 100 random labels
-        self.model.train_model(train_images, train_labels, epochs=1)
+        # Compare functions of CNNModel
+        for i in range(len(correct_functions)):
+            if correct_functions[i][0] != buggy_functions[i][0]:
+                print(f"Function names do not match: {correct_functions[i][0]} != {buggy_functions[i][0]}")
+                return False
 
-        # Test if the model evaluates successfully
-        try:
-            loss, accuracy = self.model.evaluate_model(test_images, test_labels)
-            self.assertIsInstance(loss, float, "Loss should be a float.")
-            self.assertIsInstance(accuracy, float, "Accuracy should be a float.")
-        except Exception as e:
-            self.fail(f"Model evaluation failed with error: {e}")
+            # Check if implementations match
+            correct_func_code = inspect.getsource(correct_functions[i][1])
+            buggy_func_code = inspect.getsource(buggy_functions[i][1])
 
+            if correct_func_code != buggy_func_code:
+                print(f"Function implementations do not match for {correct_functions[i][0]}")
+                return False
+            
+            if correct_functions[i][0] != '__init__':
+                output_correct = correct_functions[i][1]
+                output_buggy = buggy_functions[i][1]
+            
+                if output_correct != output_buggy:
+                    print(f"Function output does not match for {correct_functions[i][0]}")
+                    return False
+
+        return True
+    
+    except Exception as e:
+        print(str(e))
+        return False
+
+# Run the comparison
 if __name__ == "__main__":
-    unittest.main()
+    print(compare_functions())
