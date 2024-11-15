@@ -21,8 +21,3 @@ class RockPaperScissors:
             return "You win!"
         else:
             return "You lose!"
-
-game = RockPaperScissors()
-print(game.play_round("rock"))
-print(game.play_round("paper"))
-print(game.play_round("scissors"))
