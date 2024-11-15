@@ -1,83 +1,64 @@
-import unittest
-from Code6Correct.py import RelativeGrader  
+import sys
+import os
+import inspect
 
-class TestRelativeGrader(unittest.TestCase):
-    def setUp(self):
-        # Initial test data
-        self.students = [
-            {'name': 'Alice', 'grade': 85},
-            {'name': 'Bob', 'grade': 92},
-            {'name': 'Charlie', 'grade': 78},
-            {'name': 'Diana', 'grade': 90}
-        ]
-        self.grader = RelativeGrader(self.students)
+def compare_functions():
+    """
+    Compares two files containing a Backend class:
+    - Checks if function names (including __init__) match.
+    - Checks if function implementations match.
+    Returns True if both match; False otherwise.
+    """
+    try:
+        # test Backend class
+        
+        correct_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-    def test_add_student(self):
-        new_student = {'name': 'Eve', 'grade': 88}
-        self.grader.add_student(new_student)
-        self.assertIn(new_student, self.grader.students)
+        sys.path.append(correct_path)
+        from Correct import Backend as correct
+        sys.path.remove(correct_path)
 
-    def test_remove_student(self):
-        self.grader.remove_student({'name': 'Charlie', 'grade': 78})
-        self.assertNotIn({'name': 'Charlie', 'grade': 78}, self.grader.students)
+        sys.path.append(buggy_path)
+        from Buggy import Backend as buggy
+        sys.path.remove(buggy_path)
+        
+        correct_functions = inspect.getmembers(correct.Backend, inspect.isfunction)
+        buggy_functions = inspect.getmembers(buggy.Backend, inspect.isfunction)
 
-    def test_get_student(self):
-        student = self.grader.get_student('Alice')
-        self.assertEqual(student, {'name': 'Alice', 'grade': 85})
+        # Check if the number of functions is the same
+        if len(correct_functions) != len(buggy_functions):
+            print("Different number of functions in Backend class.")
+            return False
 
-    def test_update_grade(self):
-        self.grader.update_grade('Alice', 95)
-        self.assertEqual(self.grader.get_student('Alice')['grade'], 95)
+        # Compare functions of Backend
+        for i in range(len(correct_functions)):
+            if correct_functions[i][0] != buggy_functions[i][0]:
+                print(f"Function names do not match: {correct_functions[i][0]} != {buggy_functions[i][0]}")
+                return False
 
-    def test_average_grade(self):
-        self.assertAlmostEqual(self.grader.average_grade(), 86.25)
+            # Check if implementations match
+            correct_func_code = inspect.getsource(correct_functions[i][1])
+            buggy_func_code = inspect.getsource(buggy_functions[i][1])
 
-    def test_highest_grade(self):
-        self.assertEqual(self.grader.highest_grade(), {'name': 'Bob', 'grade': 92})
+            if correct_func_code != buggy_func_code:
+                print(f"Function implementations do not match for {correct_functions[i][0]}")
+                return False
+            
+            if correct_functions[i][0] != '__init__':
+                output_correct = correct_functions[i][1]
+                output_buggy = buggy_functions[i][1]
+            
+                if output_correct != output_buggy:
+                    print(f"Function output does not match for {correct_functions[i][0]}")
+                    return False
 
-    def test_lowest_grade(self):
-        self.assertEqual(self.grader.lowest_grade(), {'name': 'Charlie', 'grade': 78})
+        return True
+    
+    except Exception as e:
+        print(str(e))
+        return False
 
-    def test_grade_distribution(self):
-        distribution = self.grader.grade_distribution()
-        expected_distribution = {85: 1, 92: 1, 78: 1, 90: 1}
-        self.assertEqual(distribution, expected_distribution)
-
-    def test_median_grade(self):
-        self.assertEqual(self.grader.median_grade(), 87.5)
-
-    def test_pass_fail(self):
-        passing_grade = 80
-        passed, failed = self.grader.pass_fail(passing_grade)
-        self.assertEqual(len(passed), 3)
-        self.assertEqual(len(failed), 1)
-
-    def test_top_n_students(self):
-        top_students = self.grader.top_n_students(2)
-        self.assertEqual(top_students, [
-            {'name': 'Bob', 'grade': 92},
-            {'name': 'Diana', 'grade': 90}
-        ])
-
-    def test_bottom_n_students(self):
-        bottom_students = self.grader.bottom_n_students(2)
-        self.assertEqual(bottom_students, [
-            {'name': 'Charlie', 'grade': 78},
-            {'name': 'Alice', 'grade': 85}
-        ])
-
-    def test_grade_variance(self):
-        self.assertAlmostEqual(self.grader.grade_variance(), 31.1875)
-
-    def test_grade_standard_deviation(self):
-        self.assertAlmostEqual(self.grader.grade_standard_deviation(), 5.5825, places=4)
-
-    def test_detect_collisions(self):
-        # Add duplicate students for testing
-        self.grader.add_student({'name': 'Alice', 'grade': 90})
-        self.grader.add_student({'name': 'Bob', 'grade': 85})
-        collisions = self.grader.detect_collisions()
-        self.assertEqual(collisions, ['Alice', 'Bob'])
-
-if __name__ == '__main__':
-    unittest.main()
+# Run the comparison
+if __name__ == "__main__":
+    print(compare_functions())
