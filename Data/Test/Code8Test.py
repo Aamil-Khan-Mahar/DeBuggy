@@ -1,67 +1,71 @@
+import sys
+import os
+import inspect
 
-import unittest
-from Code8Correct.py import bubble_sort, binary_search 
+def compare_functions():
+    """
+    Compares two versions of bubble_sort and binary_search:
+    - Checks if function names (including bubble_sort and binary_search) match.
+    - Checks if function implementations match.
+    Returns True if both match; False otherwise.
+    """
+    try:
+        # test bubble_sort and binary_search
+        
+        correct_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-class TestSortAndSearch(unittest.TestCase):
+        sys.path.append(correct_path)
+        from Correct import bubble_sort, binary_search
+        sys.path.remove(correct_path)
 
-    def test_bubble_sort(self):
-        # Test case for sorting an unsorted list
-        unsorted_arr = [64, 34, 25, 12, 22, 11, 90]
-        sorted_arr = bubble_sort(unsorted_arr)
-        self.assertEqual(sorted_arr, [11, 12, 22, 25, 34, 64, 90])
+        sys.path.append(buggy_path)
+        from Buggy import bubble_sort as buggy_bubble_sort, binary_search as buggy_binary_search
+        sys.path.remove(buggy_path)
 
-    def test_bubble_sort_empty(self):
-        # Test case for an empty list
-        empty_arr = []
-        sorted_arr = bubble_sort(empty_arr)
-        self.assertEqual(sorted_arr, [])
+        correct_functions = [bubble_sort, binary_search]
+        buggy_functions = [buggy_bubble_sort, buggy_binary_search]
 
-    def test_bubble_sort_single_element(self):
-        # Test case for a list with a single element
-        single_element_arr = [5]
-        sorted_arr = bubble_sort(single_element_arr)
-        self.assertEqual(sorted_arr, [5])
+        # Check if the number of functions is the same
+        if len(correct_functions) != len(buggy_functions):
+            print("Different number of functions in bubble_sort and binary_search.")
+            return False
 
-    def test_bubble_sort_duplicates(self):
-        # Test case for a list with duplicate values
-        arr_with_duplicates = [3, 1, 2, 3, 3, 1]
-        sorted_arr = bubble_sort(arr_with_duplicates)
-        self.assertEqual(sorted_arr, [1, 1, 2, 3, 3, 3])
+        # Compare functions bubble_sort and binary_search
+        for i in range(len(correct_functions)):
+            if correct_functions[i].__name__ != buggy_functions[i].__name__:
+                print(f"Function names do not match: {correct_functions[i].__name__} != {buggy_functions[i].__name__}")
+                return False
 
-    def test_binary_search_found(self):
-        # Test case for binary search where the element is found
-        arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        target = 5
-        index = binary_search(arr, target)
-        self.assertEqual(index, 4)
+            # Check if implementations match
+            correct_func_code = inspect.getsource(correct_functions[i])
+            buggy_func_code = inspect.getsource(buggy_functions[i])
 
-    def test_binary_search_not_found(self):
-        # Test case for binary search where the element is not found
-        arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        target = 10
-        index = binary_search(arr, target)
-        self.assertEqual(index, -1)
+            if correct_func_code != buggy_func_code:
+                print(f"Function implementations do not match for {correct_functions[i].__name__}")
+                return False
 
-    def test_binary_search_empty(self):
-        # Test case for binary search with an empty list
-        arr = []
-        target = 3
-        index = binary_search(arr, target)
-        self.assertEqual(index, -1)
+        # Test correctness by running both implementations
+        correct_bubble_sort_output = bubble_sort([64, 34, 25, 12, 22, 11, 90])
+        buggy_bubble_sort_output = buggy_bubble_sort([64, 34, 25, 12, 22, 11, 90])
+        
+        if correct_bubble_sort_output != buggy_bubble_sort_output:
+            print(f"bubble_sort outputs do not match.")
+            return False
 
-    def test_binary_search_single_element_found(self):
-        # Test case for binary search with a single element (found)
-        arr = [3]
-        target = 3
-        index = binary_search(arr, target)
-        self.assertEqual(index, 0)
+        correct_binary_search_output = binary_search(correct_bubble_sort_output, 22)
+        buggy_binary_search_output = buggy_binary_search(buggy_bubble_sort_output, 22)
 
-    def test_binary_search_single_element_not_found(self):
-        # Test case for binary search with a single element (not found)
-        arr = [3]
-        target = 5
-        index = binary_search(arr, target)
-        self.assertEqual(index, -1)
+        if correct_binary_search_output != buggy_binary_search_output:
+            print(f"binary_search outputs do not match.")
+            return False
 
-if __name__ == '__main__':
-    unittest.main()
+        return True
+    
+    except Exception as e:
+        print(str(e))
+        return False
+
+# Run the comparison
+if __name__ == "__main__":
+    print(compare_functions())
