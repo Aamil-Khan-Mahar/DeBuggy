@@ -28,12 +28,3 @@ class Library:
             return "No books in the library."
         return "\n".join([f"{title} by {info['author']} ({info['copies']} copies)" for title, info in self.books.items()])
 
-library = Library()
-library.add_book("1984", "George Orwell", 3)
-library.add_book("To Kill a Mockingbird", "Harper Lee", 2)
-
-print(library.list_books())
-print(library.borrow_book("1984"))
-print(library.list_books())
-print(library.return_book("1984"))
-print(library.list_books())
