@@ -1,5 +1,5 @@
 import unittest
-from Code6Correct.py import RelativeGrader  # Replace with the actual file name if different
+from Code6Correct.py import RelativeGrader  
 
 class TestRelativeGrader(unittest.TestCase):
     def setUp(self):
