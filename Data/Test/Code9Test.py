@@ -1,8 +1,7 @@
 
 import unittest
 from unittest.mock import patch
-from Code9Correct.py import DiceGame  # Replace with the correct file name if needed
-
+from Code9Correct.py import DiceGame  
 class TestDiceGame(unittest.TestCase):
 
     @patch('random.randint')
