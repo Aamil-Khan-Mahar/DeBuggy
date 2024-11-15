@@ -1,92 +1,64 @@
-import unittest
-from unittest.mock import MagicMock
-from Code5Correct.py import Backend  
+import sys
+import os
+import inspect
 
-class TestBackend(unittest.TestCase):
-    def setUp(self):
-        # Mock database
-        self.mock_database = {}
-        self.backend = Backend(self.mock_database)
+def compare_functions():
+    """
+    Compares two files containing a Backend class:
+    - Checks if function names (including __init__) match.
+    - Checks if function implementations match.
+    Returns True if both match; False otherwise.
+    """
+    try:
+        # test Backend class
+        
+        correct_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-    def test_create_user(self):
-        self.backend.create_user("user1", {"password": "pass123", "profile": {}, "active": True})
-        self.assertIn("user1", self.mock_database)
+        sys.path.append(correct_path)
+        from Correct import Backend as correct
+        sys.path.remove(correct_path)
 
-        with self.assertRaises(ValueError):
-            self.backend.create_user("user1", {"password": "pass123"})
+        sys.path.append(buggy_path)
+        from Buggy import Backend as buggy
+        sys.path.remove(buggy_path)
+        
+        correct_functions = inspect.getmembers(correct.Backend, inspect.isfunction)
+        buggy_functions = inspect.getmembers(buggy.Backend, inspect.isfunction)
 
-    def test_get_user(self):
-        self.backend.create_user("user1", {"password": "pass123"})
-        user = self.backend.get_user("user1")
-        self.assertEqual(user["password"], "pass123")
+        # Check if the number of functions is the same
+        if len(correct_functions) != len(buggy_functions):
+            print("Different number of functions in Backend class.")
+            return False
 
-    def test_update_user(self):
-        self.backend.create_user("user1", {"password": "pass123"})
-        self.backend.update_user("user1", {"password": "newpass"})
-        user = self.backend.get_user("user1")
-        self.assertEqual(user["password"], "newpass")
+        # Compare functions of Backend
+        for i in range(len(correct_functions)):
+            if correct_functions[i][0] != buggy_functions[i][0]:
+                print(f"Function names do not match: {correct_functions[i][0]} != {buggy_functions[i][0]}")
+                return False
 
-        with self.assertRaises(ValueError):
-            self.backend.update_user("user2", {"password": "pass123"})
+            # Check if implementations match
+            correct_func_code = inspect.getsource(correct_functions[i][1])
+            buggy_func_code = inspect.getsource(buggy_functions[i][1])
 
-    def test_delete_user(self):
-        self.backend.create_user("user1", {"password": "pass123"})
-        self.backend.delete_user("user1")
-        self.assertNotIn("user1", self.mock_database)
+            if correct_func_code != buggy_func_code:
+                print(f"Function implementations do not match for {correct_functions[i][0]}")
+                return False
+            
+            if correct_functions[i][0] != '__init__':
+                output_correct = correct_functions[i][1]
+                output_buggy = buggy_functions[i][1]
+            
+                if output_correct != output_buggy:
+                    print(f"Function output does not match for {correct_functions[i][0]}")
+                    return False
 
-        with self.assertRaises(ValueError):
-            self.backend.delete_user("user1")
+        return True
+    
+    except Exception as e:
+        print(str(e))
+        return False
 
-    def test_list_users(self):
-        self.backend.create_user("user1", {"password": "pass123"})
-        self.backend.create_user("user2", {"password": "pass456"})
-        self.assertEqual(set(self.backend.list_users()), {"user1", "user2"})
-
-    def test_authenticate_user(self):
-        self.backend.create_user("user1", {"password": "pass123"})
-        self.assertTrue(self.backend.authenticate_user("user1", "pass123"))
-        self.assertFalse(self.backend.authenticate_user("user1", "wrongpass"))
-        self.assertFalse(self.backend.authenticate_user("user2", "pass123"))
-
-    def test_change_password(self):
-        self.backend.create_user("user1", {"password": "pass123"})
-        self.backend.change_password("user1", "pass123", "newpass")
-        self.assertTrue(self.backend.authenticate_user("user1", "newpass"))
-
-        with self.assertRaises(ValueError):
-            self.backend.change_password("user1", "wrongpass", "newpass")
-
-    def test_search_users(self):
-        self.backend.create_user("user1", {"password": "pass123", "profile": {"name": "Alice"}})
-        self.backend.create_user("user2", {"password": "pass456", "profile": {"name": "Bob"}})
-        results = self.backend.search_users("Alice")
-        self.assertIn("user1", results)
-        self.assertNotIn("user2", results)
-
-    def test_user_profile(self):
-        self.backend.create_user("user1", {"password": "pass123", "profile": {"name": "Alice"}})
-        profile = self.backend.get_user_profile("user1")
-        self.assertEqual(profile["profile"]["name"], "Alice")
-
-        self.backend.update_user_profile("user1", {"name": "Updated Alice"})
-        profile = self.backend.get_user_profile("user1")
-        self.assertEqual(profile["profile"]["name"], "Updated Alice")
-
-    def test_activate_deactivate_user(self):
-        self.backend.create_user("user1", {"password": "pass123", "active": True})
-        self.backend.deactivate_user("user1")
-        self.assertFalse(self.mock_database["user1"]["active"])
-
-        self.backend.activate_user("user1")
-        self.assertTrue(self.mock_database["user1"]["active"])
-
-    def test_get_active_inactive_users(self):
-        self.backend.create_user("user1", {"password": "pass123", "active": True})
-        self.backend.create_user("user2", {"password": "pass456", "active": False})
-        active_users = self.backend.get_active_users()
-        inactive_users = self.backend.get_inactive_users()
-        self.assertIn("user1", active_users)
-        self.assertIn("user2", inactive_users)
-
+# Run the comparison
 if __name__ == "__main__":
-    unittest.main()
+    print(compare_functions())
