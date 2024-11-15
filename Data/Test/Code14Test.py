@@ -1,37 +1,51 @@
-import unittest
-from unittest.mock import patch
-from Code14Correct.py import RockPaperScissors  
+import sys
+import os
 
-class TestRockPaperScissors(unittest.TestCase):
+def compare_rock_paper_scissors():
+    """
+    Compares the play_round method of both the correct and buggy code:
+    - Checks if the play_round method correctly handles valid inputs and returns appropriate results.
+    Returns True if both match for all cases; False otherwise.
+    """
+    try:
+        # Test cases for Rock, Paper, Scissors
+        test_choices = ["rock", "paper", "scissors"]
+        correct_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-    # Test case for valid choices
-    @patch('random.choice', return_value='rock')  # Mocking random.choice to always return 'rock'
-    def test_play_round_tie(self, mock_random_choice):
-        game = RockPaperScissors()
-        result = game.play_round('rock')
-        self.assertEqual(result, "It's a tie!")
-        mock_random_choice.assert_called_with(["rock", "paper", "scissors"])
+        sys.path.append(correct_path)
+        from Correct import RockPaperScissors as CorrectRPS
+        sys.path.remove(correct_path)
 
-    @patch('random.choice', return_value='scissors')
-    def test_play_round_win(self, mock_random_choice):
-        game = RockPaperScissors()
-        result = game.play_round('rock')
-        self.assertEqual(result, "You win!")
-        mock_random_choice.assert_called_with(["rock", "paper", "scissors"])
+        sys.path.append(buggy_path)
+        from Buggy import RockPaperScissors as BuggyRPS
+        sys.path.remove(buggy_path)
 
-    @patch('random.choice', return_value='paper')
-    def test_play_round_lose(self, mock_random_choice):
-        game = RockPaperScissors()
-        result = game.play_round('rock')
-        self.assertEqual(result, "You lose!")
-        mock_random_choice.assert_called_with(["rock", "paper", "scissors"])
+        # Initialize game objects for correct and buggy code
+        correct_game = CorrectRPS()
+        buggy_game = BuggyRPS()
 
-    # Test invalid choice
-    def test_invalid_choice(self):
-        game = RockPaperScissors()
-        result = game.play_round('lizard')  # Invalid choice
-        self.assertEqual(result, "Invalid choice. Choose 'rock', 'paper', or 'scissors'.")
+        # Test play_round for each choice
+        for player_choice in test_choices:
+            print(f"Testing with player choice: {player_choice}")
+            
+            # Compare correct and buggy results
+            correct_result = correct_game.play_round(player_choice)
+            buggy_result = buggy_game.play_round(player_choice)
+            
+            if correct_result != buggy_result:
+                print(f"Mismatch for player choice '{player_choice}':")
+                print(f"Correct: {correct_result}")
+                print(f"Buggy: {buggy_result}")
+                return False
 
-if __name__ == '__main__':
-    unittest.main()
+        return True
+    
+    except Exception as e:
+        print(f"Error during comparison: {str(e)}")
+        return False
 
+
+# Run the comparison
+if __name__ == "__main__":
+    print(compare_rock_paper_scissors())
