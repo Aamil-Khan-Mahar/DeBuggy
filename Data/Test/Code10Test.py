@@ -14,11 +14,11 @@ def compare_functions():
         buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Buggy'))
 
         sys.path.append(correct_path)
-        from Correct import BankAccount as CorrectBankAccount
+        from Correct.Code10Correct import BankAccount as CorrectBankAccount
         sys.path.remove(correct_path)
 
         sys.path.append(buggy_path)
-        from Buggy import BankAccount as BuggyBankAccount
+        from Buggy.Code10Buggy import BankAccount as BuggyBankAccount
         sys.path.remove(buggy_path)
 
         correct_functions = inspect.getmembers(CorrectBankAccount, inspect.isfunction)

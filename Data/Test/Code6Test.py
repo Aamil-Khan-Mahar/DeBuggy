@@ -14,11 +14,11 @@ def compare_functions():
         buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Buggy'))
 
         sys.path.append(correct_path)
-        from Correct import RelativeGrader as CorrectGrader
+        from Correct.Code6Correct import RelativeGrader as CorrectGrader
         sys.path.remove(correct_path)
 
         sys.path.append(buggy_path)
-        from Buggy import RelativeGrader as BuggyGrader
+        from Buggy.Code6Buggy import RelativeGrader as BuggyGrader
         sys.path.remove(buggy_path)
 
         correct_functions = inspect.getmembers(CorrectGrader, inspect.isfunction)

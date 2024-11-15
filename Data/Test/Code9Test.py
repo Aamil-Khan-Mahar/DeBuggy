@@ -14,11 +14,11 @@ def compare_functions():
         buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Buggy'))
 
         sys.path.append(correct_path)
-        from Correct import DiceGame as CorrectDiceGame
+        from Correct.Code9Correct import DiceGame as CorrectDiceGame
         sys.path.remove(correct_path)
 
         sys.path.append(buggy_path)
-        from Buggy import DiceGame as BuggyDiceGame
+        from Buggy.Code9Buggy import DiceGame as BuggyDiceGame
         sys.path.remove(buggy_path)
 
         correct_functions = inspect.getmembers(CorrectDiceGame, inspect.isfunction)
