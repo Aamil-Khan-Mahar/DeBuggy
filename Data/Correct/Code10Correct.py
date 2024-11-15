@@ -21,9 +21,3 @@ class BankAccount:
 
     def check_balance(self):
         return f"Account owner: {self.owner}, Balance: ${self.balance}"
-
-account = BankAccount("Alice", 1000)
-print(account.deposit(500))
-print(account.withdraw(200))
-print(account.withdraw(1500))
-print(account.check_balance())
