@@ -1,66 +1,64 @@
-import unittest
-from Code7Correct.py import Library  
+import sys
+import os
+import inspect
 
-class TestLibrary(unittest.TestCase):
+def compare_functions():
+    """
+    Compares two versions of the Library class:
+    - Checks if function names (including __init__) match.
+    - Checks if function implementations match.
+    Returns True if both match; False otherwise.
+    """
+    try:
+        # test Library class
+        
+        correct_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-    def setUp(self):
-        # Initialize the library and add some test books
-        self.library = Library()
-        self.library.add_book("1984", "George Orwell", 3)
-        self.library.add_book("To Kill a Mockingbird", "Harper Lee", 2)
+        sys.path.append(correct_path)
+        from Correct import Library as correct
+        sys.path.remove(correct_path)
 
-    def test_add_book(self):
-        # Test adding a new book
-        self.library.add_book("Brave New World", "Aldous Huxley", 5)
-        books = self.library.list_books()
-        self.assertIn("Brave New World by Aldous Huxley (5 copies)", books)
+        sys.path.append(buggy_path)
+        from Buggy import Library as buggy
+        sys.path.remove(buggy_path)
 
-    def test_add_existing_book(self):
-        # Test adding copies of an existing book
-        self.library.add_book("1984", "George Orwell", 2)
-        books = self.library.list_books()
-        self.assertIn("1984 by George Orwell (5 copies)", books)
+        correct_functions = inspect.getmembers(correct.Library, inspect.isfunction)
+        buggy_functions = inspect.getmembers(buggy.Library, inspect.isfunction)
 
-    def test_borrow_book_success(self):
-        # Test borrowing a book successfully
-        response = self.library.borrow_book("1984")
-        self.assertEqual(response, "You have borrowed '1984' by George Orwell.")
-        books = self.library.list_books()
-        self.assertIn("1984 by George Orwell (4 copies)", books)
+        # Check if the number of functions is the same
+        if len(correct_functions) != len(buggy_functions):
+            print("Different number of functions in Library class.")
+            return False
 
-    def test_borrow_book_unavailable(self):
-        # Test borrowing a book that is not available
-        self.library.borrow_book("1984")
-        self.library.borrow_book("1984")
-        self.library.borrow_book("1984")
-        response = self.library.borrow_book("1984")
-        self.assertEqual(response, "Book not available.")
+        # Compare functions of Library
+        for i in range(len(correct_functions)):
+            if correct_functions[i][0] != buggy_functions[i][0]:
+                print(f"Function names do not match: {correct_functions[i][0]} != {buggy_functions[i][0]}")
+                return False
 
-    def test_return_book(self):
-        # Test returning a book
-        self.library.borrow_book("1984")
-        self.library.return_book("1984")
-        books = self.library.list_books()
-        self.assertIn("1984 by George Orwell (4 copies)", books)
+            # Check if implementations match
+            correct_func_code = inspect.getsource(correct_functions[i][1])
+            buggy_func_code = inspect.getsource(buggy_functions[i][1])
 
-    def test_return_book_new_book(self):
-        # Test returning a book that is not in the library yet
-        self.library.return_book("The Catcher in the Rye")
-        books = self.library.list_books()
-        self.assertIn("The Catcher in the Rye by Unknown (1 copies)", books)
+            if correct_func_code != buggy_func_code:
+                print(f"Function implementations do not match for {correct_functions[i][0]}")
+                return False
 
-    def test_list_books_empty(self):
-        # Test when there are no books in the library
-        empty_library = Library()
-        response = empty_library.list_books()
-        self.assertEqual(response, "No books in the library.")
+            if correct_functions[i][0] != '__init__':
+                output_correct = correct_functions[i][1]
+                output_buggy = buggy_functions[i][1]
 
-    def test_list_books_non_empty(self):
-        # Test listing books when there are books in the library
-        books = self.library.list_books()
-        self.assertIn("1984 by George Orwell (3 copies)", books)
-        self.assertIn("To Kill a Mockingbird by Harper Lee (2 copies)", books)
+                if output_correct != output_buggy:
+                    print(f"Function output does not match for {correct_functions[i][0]}")
+                    return False
 
-if __name__ == '__main__':
-    unittest.main()
+        return True
+    
+    except Exception as e:
+        print(str(e))
+        return False
 
+# Run the comparison
+if __name__ == "__main__":
+    print(compare_functions())
