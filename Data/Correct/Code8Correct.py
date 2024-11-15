@@ -23,14 +23,3 @@ def binary_search(arr, target):
         else:
             high = mid - 1
     return -1
-
-numbers = [64, 34, 25, 12, 22, 11, 90]
-sorted_numbers = bubble_sort(numbers)
-print("Sorted Array:", sorted_numbers)
-
-target = 22
-index = binary_search(sorted_numbers, target)
-if index != -1:
-    print(f"Element {target} found at index {index}.")
-else:
-    print(f"Element {target} not found.")
