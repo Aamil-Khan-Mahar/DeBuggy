@@ -1,58 +1,71 @@
-import unittest
-from Code10Correct.py import BankAccount  
+import sys
+import os
+import inspect
 
-class TestBankAccount(unittest.TestCase):
-
-    def test_initial_balance(self):
-        account = BankAccount("Alice", 1000)
-        self.assertEqual(account.balance, 1000)
-        self.assertEqual(account.owner, "Alice")
-
-    def test_deposit_valid(self):
-        account = BankAccount("Alice", 1000)
-        response = account.deposit(500)
-        self.assertEqual(response, "$500 deposited. New balance: $1500")
-        self.assertEqual(account.balance, 1500)
-
-    def test_deposit_invalid(self):
-        account = BankAccount("Alice", 1000)
-        response = account.deposit(-500)
-        self.assertEqual(response, "Deposit amount must be positive.")
-        self.assertEqual(account.balance, 1000)
-
-    def test_withdraw_valid(self):
-        account = BankAccount("Alice", 1000)
-        response = account.withdraw(200)
-        self.assertEqual(response, "$200 withdrawn. Remaining balance: $800")
-        self.assertEqual(account.balance, 800)
-
-    def test_withdraw_invalid(self):
-        account = BankAccount("Alice", 1000)
-        response = account.withdraw(1500)
-        self.assertEqual(response, "Insufficient funds.")
-        self.assertEqual(account.balance, 1000)
-
-    def test_withdraw_negative(self):
-        account = BankAccount("Alice", 1000)
-        response = account.withdraw(-200)
-        self.assertEqual(response, "Withdrawal amount must be positive.")
-        self.assertEqual(account.balance, 1000)
-
-    def test_check_balance(self):
-        account = BankAccount("Alice", 1000)
-        response = account.check_balance()
-        self.assertEqual(response, "Account owner: Alice, Balance: $1000")
-
-    def test_multiple_transactions(self):
-        account = BankAccount("Alice", 1000)
-        account.deposit(500)
-        account.withdraw(300)
-        account.deposit(200)
-        account.withdraw(100)
+def compare_functions():
+    """
+    Compares two versions of bubble_sort and binary_search:
+    - Checks if function names (including bubble_sort and binary_search) match.
+    - Checks if function implementations match.
+    Returns True if both match; False otherwise.
+    """
+    try:
+        # test bubble_sort and binary_search
         
-        # After these transactions: 1000 + 500 - 300 + 200 - 100 = 1300
-        self.assertEqual(account.balance, 1300)
+        correct_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-if __name__ == '__main__':
-    unittest.main()
+        sys.path.append(correct_path)
+        from Correct import bubble_sort, binary_search
+        sys.path.remove(correct_path)
 
+        sys.path.append(buggy_path)
+        from Buggy import bubble_sort as buggy_bubble_sort, binary_search as buggy_binary_search
+        sys.path.remove(buggy_path)
+
+        correct_functions = [bubble_sort, binary_search]
+        buggy_functions = [buggy_bubble_sort, buggy_binary_search]
+
+        # Check if the number of functions is the same
+        if len(correct_functions) != len(buggy_functions):
+            print("Different number of functions in bubble_sort and binary_search.")
+            return False
+
+        # Compare functions bubble_sort and binary_search
+        for i in range(len(correct_functions)):
+            if correct_functions[i].__name__ != buggy_functions[i].__name__:
+                print(f"Function names do not match: {correct_functions[i].__name__} != {buggy_functions[i].__name__}")
+                return False
+
+            # Check if implementations match
+            correct_func_code = inspect.getsource(correct_functions[i])
+            buggy_func_code = inspect.getsource(buggy_functions[i])
+
+            if correct_func_code != buggy_func_code:
+                print(f"Function implementations do not match for {correct_functions[i].__name__}")
+                return False
+
+        # Test correctness by running both implementations
+        correct_bubble_sort_output = bubble_sort([64, 34, 25, 12, 22, 11, 90])
+        buggy_bubble_sort_output = buggy_bubble_sort([64, 34, 25, 12, 22, 11, 90])
+        
+        if correct_bubble_sort_output != buggy_bubble_sort_output:
+            print(f"bubble_sort outputs do not match.")
+            return False
+
+        correct_binary_search_output = binary_search(correct_bubble_sort_output, 22)
+        buggy_binary_search_output = buggy_binary_search(buggy_bubble_sort_output, 22)
+
+        if correct_binary_search_output != buggy_binary_search_output:
+            print(f"binary_search outputs do not match.")
+            return False
+
+        return True
+    
+    except Exception as e:
+        print(str(e))
+        return False
+
+# Run the comparison
+if __name__ == "__main__":
+    print(compare_functions())
