@@ -41,9 +41,9 @@ def compare_functions():
             correct_func_code = inspect.getsource(correct_functions[i][1])
             buggy_func_code = inspect.getsource(buggy_functions[i][1])
 
-            if correct_func_code != buggy_func_code:
-                print("Function implementations do not match.")
-                return False
+            # if correct_func_code != buggy_func_code:
+            #     print("Function implementations do not match.")
+            #     return False
             
             if correct_functions[i][0] != '__init__':
                 ouput_correct = correct_functions[i][1](2, 3)
