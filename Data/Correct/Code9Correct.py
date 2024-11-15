@@ -20,17 +20,3 @@ class DiceGame:
         max_score = max(self.scores.values())
         winners = [player for player, score in self.scores.items() if score == max_score]
         return winners, max_score
-
-game = DiceGame(["Alice", "Bob", "Charlie"])
-rounds = 5
-
-for round in range(rounds):
-    print(f"\n--- Round {round + 1} ---")
-    game.play_round()
-
-winners, score = game.get_winner()
-if len(winners) == 1:
-    print(f"\nThe winner is {winners[0]} with a score of {score}!")
-else:
-    print(f"\nIt's a tie between {', '.join(winners)} with a score of {score}!")
-
