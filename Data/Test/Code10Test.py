@@ -1,71 +1,69 @@
-import sys
 import os
+import sys
 import inspect
 
 def compare_functions():
     """
-    Compares two versions of bubble_sort and binary_search:
-    - Checks if function names (including bubble_sort and binary_search) match.
-    - Checks if function implementations match.
+    Compares two files containing a BankAccount class:
+    - Checks if function names (including __init__) match.
+    - Checks if function outputs match when functions are called on instances.
     Returns True if both match; False otherwise.
     """
     try:
-        # test bubble_sort and binary_search
-        
-        correct_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-        buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        correct_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Correct'))
+        buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Buggy'))
 
         sys.path.append(correct_path)
-        from Correct import bubble_sort, binary_search
+        from Correct import BankAccount as CorrectBankAccount
         sys.path.remove(correct_path)
 
         sys.path.append(buggy_path)
-        from Buggy import bubble_sort as buggy_bubble_sort, binary_search as buggy_binary_search
+        from Buggy import BankAccount as BuggyBankAccount
         sys.path.remove(buggy_path)
 
-        correct_functions = [bubble_sort, binary_search]
-        buggy_functions = [buggy_bubble_sort, buggy_binary_search]
+        correct_functions = inspect.getmembers(CorrectBankAccount, inspect.isfunction)
+        buggy_functions = inspect.getmembers(BuggyBankAccount, inspect.isfunction)
 
-        # Check if the number of functions is the same
         if len(correct_functions) != len(buggy_functions):
-            print("Different number of functions in bubble_sort and binary_search.")
+            print("Different number of functions in BankAccount class.")
             return False
 
-        # Compare functions bubble_sort and binary_search
+        correct_instance = CorrectBankAccount("Alice", 100)
+        buggy_instance = BuggyBankAccount("Alice", 100)
+
         for i in range(len(correct_functions)):
-            if correct_functions[i].__name__ != buggy_functions[i].__name__:
-                print(f"Function names do not match: {correct_functions[i].__name__} != {buggy_functions[i].__name__}")
+            if correct_functions[i][0] != buggy_functions[i][0]:
+                print(f"Function names do not match: {correct_functions[i][0]} != {buggy_functions[i][0]}")
                 return False
 
-            # Check if implementations match
-            correct_func_code = inspect.getsource(correct_functions[i])
-            buggy_func_code = inspect.getsource(buggy_functions[i])
+            if correct_functions[i][0] != '__init__':
+                if correct_functions[i][0] == "deposit":
+                    output_correct = correct_functions[i][1](correct_instance, 50)
+                    output_buggy = buggy_functions[i][1](buggy_instance, 50)
+                    if output_correct != output_buggy:
+                        print(f"Function deposit output does not match: {output_correct} != {output_buggy}")
+                        return False
 
-            if correct_func_code != buggy_func_code:
-                print(f"Function implementations do not match for {correct_functions[i].__name__}")
-                return False
+                elif correct_functions[i][0] == "withdraw":
+                    output_correct = correct_functions[i][1](correct_instance, 30)
+                    output_buggy = buggy_functions[i][1](buggy_instance, 30)
+                    if output_correct != output_buggy:
+                        print(f"Function withdraw output does not match: {output_correct} != {output_buggy}")
+                        return False
 
-        # Test correctness by running both implementations
-        correct_bubble_sort_output = bubble_sort([64, 34, 25, 12, 22, 11, 90])
-        buggy_bubble_sort_output = buggy_bubble_sort([64, 34, 25, 12, 22, 11, 90])
-        
-        if correct_bubble_sort_output != buggy_bubble_sort_output:
-            print(f"bubble_sort outputs do not match.")
-            return False
-
-        correct_binary_search_output = binary_search(correct_bubble_sort_output, 22)
-        buggy_binary_search_output = buggy_binary_search(buggy_bubble_sort_output, 22)
-
-        if correct_binary_search_output != buggy_binary_search_output:
-            print(f"binary_search outputs do not match.")
-            return False
+                elif correct_functions[i][0] == "check_balance":
+                    output_correct = correct_functions[i][1](correct_instance)
+                    output_buggy = buggy_functions[i][1](buggy_instance)
+                    if output_correct != output_buggy:
+                        print(f"Function check_balance output does not match: {output_correct} != {output_buggy}")
+                        return False
 
         return True
-    
+
     except Exception as e:
         print(str(e))
         return False
 
-# Run the comparison
 if __name__ == "__main__":
     print(compare_functions())
+
