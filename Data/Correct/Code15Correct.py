@@ -43,11 +43,3 @@ class NeuralNetwork:
                 loss = np.mean((y - output) ** 2)
                 print(f"Epoch {epoch}, Loss: {loss}")
 
-X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]]) 
-y = np.array([[0], [1], [1], [0]]) 
-
-nn = NeuralNetwork(input_size=2, hidden_size=4, output_size=1, learning_rate=0.1)
-nn.train(X, y, epochs=10000)
-
-for i in range(len(X)):
-    print(f"Input: {X[i]}, Predicted: {nn.forward(X[i].reshape(1, -1))}, Actual: {y[i]}")
