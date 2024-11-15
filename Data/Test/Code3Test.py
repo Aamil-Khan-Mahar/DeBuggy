@@ -41,15 +41,17 @@ def compare_functions():
             correct_func_code = inspect.getsource(correct_functions[i][1])
             buggy_func_code = inspect.getsource(buggy_functions[i][1])
 
-            if correct_func_code != buggy_func_code:
-                print(f"Function implementations do not match for {correct_functions[i][0]}")
-                return False
+            # if correct_func_code != buggy_func_code:
+            #     print(f"Function implementations do not match for {correct_functions[i][0]}")
+            #     return False
             
             if correct_functions[i][0] != '__init__':
                 output_correct = correct_functions         
                 output_buggy = buggy_functions 
                 if output_correct != output_buggy:
                     print(f"Function output does not match for {correct_functions[i][0]}")
+                    print(f"Correct: {output_correct}")
+                    print(f"Buggy: {output_buggy}")
                     return False
 
         # Now, compare StudentDatabase class

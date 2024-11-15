@@ -51,6 +51,8 @@ def compare_functions():
             
                 if output_correct != output_buggy:
                     print(f"Function output does not match for {correct_functions[i][0]}")
+                    print(f"Correct: {output_correct}")
+                    print(f"Buggy: {output_buggy}")
                     return False
 
         return True
