@@ -19,9 +19,3 @@ class ToDoList:
         if not self.tasks:
             return "No tasks in the list."
         return "\n".join([f"[{'X' if t['completed'] else ' '}] {t['task']}" for t in self.tasks])
-
-todo = ToDoList()
-print(todo.add_task("Buy groceries"))
-print(todo.add_task("Clean the house"))
-print(todo.complete_task("Buy groceries"))
-print(todo.show_tasks())
