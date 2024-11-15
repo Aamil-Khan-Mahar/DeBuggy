@@ -14,11 +14,11 @@ def compare_rock_paper_scissors():
         buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
         sys.path.append(correct_path)
-        from Correct import RockPaperScissors as CorrectRPS
+        from Correct.Code14Correct import RockPaperScissors as CorrectRPS
         sys.path.remove(correct_path)
 
         sys.path.append(buggy_path)
-        from Buggy import RockPaperScissors as BuggyRPS
+        from Buggy.Code14Buggy import RockPaperScissors as BuggyRPS
         sys.path.remove(buggy_path)
 
         # Initialize game objects for correct and buggy code

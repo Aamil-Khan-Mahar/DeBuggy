@@ -16,11 +16,11 @@ def compare_functions():
         buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
         sys.path.append(correct_path)
-        from Correct import bubble_sort, binary_search
+        from Correct.Code8Correct import bubble_sort, binary_search
         sys.path.remove(correct_path)
 
         sys.path.append(buggy_path)
-        from Buggy import bubble_sort as buggy_bubble_sort, binary_search as buggy_binary_search
+        from Buggy.Code8Buggy import bubble_sort as buggy_bubble_sort, binary_search as buggy_binary_search
         sys.path.remove(buggy_path)
 
         correct_functions = [bubble_sort, binary_search]

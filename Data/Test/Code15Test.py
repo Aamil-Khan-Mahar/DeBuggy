@@ -19,11 +19,11 @@ def compare_neural_network():
 
         # Dynamically import both correct and buggy code
         sys.path.append(correct_path)
-        from Correct import NeuralNetwork as CorrectNN
+        from Correct.Code15Correct import NeuralNetwork as CorrectNN
         sys.path.remove(correct_path)
 
         sys.path.append(buggy_path)
-        from Buggy import NeuralNetwork as BuggyNN
+        from Buggy.Code15Buggy import NeuralNetwork as BuggyNN
         sys.path.remove(buggy_path)
 
         # Initialize neural network objects for both versions

@@ -16,11 +16,11 @@ def compare_functions():
         buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
         sys.path.append(correct_path)
-        from Correct import Library as correct
+        from Correct import Code7Correct as correct
         sys.path.remove(correct_path)
 
         sys.path.append(buggy_path)
-        from Buggy import Library as buggy
+        from Buggy import Code7Buggy as buggy
         sys.path.remove(buggy_path)
 
         correct_functions = inspect.getmembers(correct.Library, inspect.isfunction)

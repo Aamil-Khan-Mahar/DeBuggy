@@ -16,13 +16,13 @@ def compare_functions():
         buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
         sys.path.append(correct_path)
-        from Correct import calculate_circle_area, calculate_rectangle_area, calculate_triangle_area
+        from Correct.Code11Correct import calculate_circle_area, calculate_rectangle_area, calculate_triangle_area
         sys.path.remove(correct_path)
 
         sys.path.append(buggy_path)
-        from Buggy import calculate_circle_area as buggy_calculate_circle_area
-        from Buggy import calculate_rectangle_area as buggy_calculate_rectangle_area
-        from Buggy import calculate_triangle_area as buggy_calculate_triangle_area
+        from Buggy.Code11Buggy import calculate_circle_area as buggy_calculate_circle_area
+        from Buggy.Code11Buggy import calculate_rectangle_area as buggy_calculate_rectangle_area
+        from Buggy.Code11Buggy import calculate_triangle_area as buggy_calculate_triangle_area
         sys.path.remove(buggy_path)
 
         # Test cases for circle area

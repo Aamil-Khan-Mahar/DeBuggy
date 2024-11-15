@@ -13,11 +13,11 @@ def compare_functions():
         buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
         sys.path.append(correct_path)
-        from Correct import fibonacci as CorrectFibonacci, factorial as CorrectFactorial
+        from Correct.Code13Correct import fibonacci as CorrectFibonacci, factorial as CorrectFactorial
         sys.path.remove(correct_path)
 
         sys.path.append(buggy_path)
-        from Buggy import fibonacci as BuggyFibonacci, factorial as BuggyFactorial
+        from Buggy.Code13Buggy import fibonacci as BuggyFibonacci, factorial as BuggyFactorial
         sys.path.remove(buggy_path)
 
         # Test cases for correct functionality

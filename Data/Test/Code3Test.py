@@ -16,11 +16,11 @@ def compare_functions():
         buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
         sys.path.append(correct_path)
-        from Correct import Code1Correct as correct
+        from Correct import Code3Correct as correct
         sys.path.remove(correct_path)
 
         sys.path.append(buggy_path)
-        from Buggy import Code1Buggy as buggy
+        from Buggy import Code3Buggy as buggy
         sys.path.remove(buggy_path)
         
         correct_functions = inspect.getmembers(correct.BPlusTree, inspect.isfunction)
@@ -46,8 +46,9 @@ def compare_functions():
                 return False
             
             if correct_functions[i][0] != '__init__':
-                output_correct = correct_functions         output_buggy = buggy_functions 
-                    if output_correct != output_buggy:
+                output_correct = correct_functions         
+                output_buggy = buggy_functions 
+                if output_correct != output_buggy:
                     print(f"Function output does not match for {correct_functions[i][0]}")
                     return False
 
@@ -73,9 +74,9 @@ def compare_functions():
             
             if correct_functions[i][0] != '__init__':
                 output_correct = correct_functions 
-              buggy = buggy_functions 
+                output_buggy = buggy_functions 
             
-          output_correct != output_buggy:
+                if output_correct != output_buggy:
                     print(f"Function output does not match for {correct_functions[i][0]} in StudentDatabase")
                     return False
 

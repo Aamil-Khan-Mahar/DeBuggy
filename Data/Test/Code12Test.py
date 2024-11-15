@@ -14,11 +14,11 @@ def compare_classes():
         buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
         sys.path.append(correct_path)
-        from Correct import ToDoList as CorrectToDoList
+        from Correct.Code12Correct import ToDoList as CorrectToDoList
         sys.path.remove(correct_path)
 
         sys.path.append(buggy_path)
-        from Buggy import ToDoList as BuggyToDoList
+        from Buggy.Code12Buggy import ToDoList as BuggyToDoList
         sys.path.remove(buggy_path)
 
         # Test cases for correct functionality
