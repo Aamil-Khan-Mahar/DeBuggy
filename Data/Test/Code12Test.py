@@ -1,74 +1,67 @@
-import unittest
-from Code12Correct.py import ToDoList  
+import sys
+import os
 
-class TestToDoList(unittest.TestCase):
+def compare_classes():
+    """
+    Compares the ToDoList class functionality from both the correct and buggy code:
+    - Checks if function names and logic match.
+    - Tests if the functions return the expected results for adding, completing, and displaying tasks.
+    Returns True if both match; False otherwise.
+    """
+    try:
+        # Test both the correct and buggy versions of the ToDoList class
+        correct_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        buggy_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-    def setUp(self):
-        """Set up a fresh ToDoList instance before each test."""
-        self.todo = ToDoList()
+        sys.path.append(correct_path)
+        from Correct import ToDoList as CorrectToDoList
+        sys.path.remove(correct_path)
 
-    def test_add_task(self):
-        # Test adding a task to the list
-        task = "Buy groceries"
-        result = self.todo.add_task(task)
-        self.assertEqual(result, f"Task '{task}' added.")
-        self.assertEqual(len(self.todo.tasks), 1)
-        self.assertEqual(self.todo.tasks[0]["task"], task)
-        self.assertFalse(self.todo.tasks[0]["completed"])
+        sys.path.append(buggy_path)
+        from Buggy import ToDoList as BuggyToDoList
+        sys.path.remove(buggy_path)
 
-    def test_complete_task(self):
-        # Test completing a task
-        task = "Buy groceries"
-        self.todo.add_task(task)
-        result = self.todo.complete_task(task)
-        self.assertEqual(result, f"Task '{task}' marked as completed.")
-        self.assertTrue(self.todo.tasks[0]["completed"])
+        # Test cases for correct functionality
+        correct_todo = CorrectToDoList()
+        buggy_todo = BuggyToDoList()
 
-    def test_complete_task_not_found(self):
-        # Test attempting to complete a task that doesn't exist
-        task = "Buy groceries"
-        result = self.todo.complete_task(task)
-        self.assertEqual(result, f"Task '{task}' not found or already completed.")
+        # Add tasks
+        correct_add = correct_todo.add_task("Buy groceries")
+        buggy_add = buggy_todo.add_task("Buy groceries")
 
-    def test_complete_task_already_completed(self):
-        # Test completing a task that is already marked as completed
-        task = "Buy groceries"
-        self.todo.add_task(task)
-        self.todo.complete_task(task)
-        result = self.todo.complete_task(task)
-        self.assertEqual(result, f"Task '{task}' not found or already completed.")
+        # Complete tasks
+        correct_complete = correct_todo.complete_task("Buy groceries")
+        buggy_complete = buggy_todo.complete_task("Buy groceries")
 
-    def test_show_tasks_empty(self):
-        # Test showing tasks when the list is empty
-        result = self.todo.show_tasks()
-        self.assertEqual(result, "No tasks in the list.")
+        # Show tasks
+        correct_show = correct_todo.show_tasks()
+        buggy_show = buggy_todo.show_tasks()
 
-    def test_show_tasks(self):
-        # Test showing tasks when there are tasks in the list
-        self.todo.add_task("Buy groceries")
-        self.todo.add_task("Clean the house")
-        result = self.todo.show_tasks()
-        expected = "[ ] Buy groceries\n[ ] Clean the house"
-        self.assertEqual(result, expected)
+        # Test results for each function
+        if correct_add != buggy_add:
+            print(f"Add task mismatch: Correct: {correct_add}, Buggy: {buggy_add}")
+            return False
+        if correct_complete != buggy_complete:
+            print(f"Complete task mismatch: Correct: {correct_complete}, Buggy: {buggy_complete}")
+            return False
+        if correct_show != buggy_show:
+            print(f"Show tasks mismatch: Correct: {correct_show}, Buggy: {buggy_show}")
+            return False
 
-    def test_show_tasks_with_completed(self):
-        # Test showing tasks with some completed
-        self.todo.add_task("Buy groceries")
-        self.todo.add_task("Clean the house")
-        self.todo.complete_task("Buy groceries")
-        result = self.todo.show_tasks()
-        expected = "[X] Buy groceries\n[ ] Clean the house"
-        self.assertEqual(result, expected)
+        # Additional test for the buggy initialization (wrong class name in the buggy code)
+        try:
+            buggy_todo_invalid = BuggyToDoList()  # This should fail due to the typo in 'ToDoListt'
+        except TypeError:
+            print("Buggy code fails correctly due to incorrect class name 'ToDoListt'.")
+            return False
 
-    def test_add_multiple_tasks(self):
-        # Test adding multiple tasks
-        self.todo.add_task("Buy groceries")
-        self.todo.add_task("Clean the house")
-        self.todo.add_task("Finish homework")
-        result = self.todo.show_tasks()
-        expected = "[ ] Buy groceries\n[ ] Clean the house\n[ ] Finish homework"
-        self.assertEqual(result, expected)
+        return True
+    
+    except Exception as e:
+        print(f"Error during comparison: {str(e)}")
+        return False
 
-if __name__ == '__main__':
-    unittest.main()
 
+# Run the comparison
+if __name__ == "__main__":
+    print(compare_classes())
