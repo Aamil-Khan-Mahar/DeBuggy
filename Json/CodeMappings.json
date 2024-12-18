@@ -1,0 +1,1485 @@
+{
+    "Code6Buggy.py": {
+        "File Name": "Code6Buggy.py",
+        "Description": "This python file contains code for a class named 'RelativeGrader' which is used for handling student grading operations such as adding students, removing students, retrieving student details, updating grades, calculating average, highest and lowest grade, distributing grades, calculating median grade, segregating passed and failed students, top and bottom 'n' students, calculating grade variance and standard deviation and detecting any name collisions among students.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "RelativeGrader": {
+                "Description": "A class for reviewing and operating on the grading for a list of students.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Class constructor initializing the 'students' attribute.",
+                        "Parameters": {
+                            "students": {
+                                "Name": "students",
+                                "Type": "list",
+                                "Description": "A list containing student details."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Public"
+                    },
+                    "add_student": {
+                        "Description": "Appends a new student to the 'students' attribute.",
+                        "Parameters": {
+                            "student": {
+                                "Name": "student",
+                                "Type": "dict",
+                                "Description": "Student's detail."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Public"
+                    },
+                    "remove_student": {
+                        "Description": "Removes a student from the 'students' attribute.",
+                        "Parameters": {
+                            "student": {
+                                "Name": "student",
+                                "Type": "dict",
+                                "Description": "Student's detail to be removed."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Public"
+                    },
+                    "get_student": {
+                        "Description": "Returns a student's detail if the student is in student list.",
+                        "Parameters": {
+                            "name": {
+                                "Name": "name",
+                                "Type": "string",
+                                "Description": "Name of the student."
+                            }
+                        },
+                        "Return values": {
+                            "student": {
+                                "Type": "dict or None",
+                                "Description": "Student's detail or None if no such student exists."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "update_grade": {
+                        "Description": "Updates a student's grade.",
+                        "Parameters": {
+                            "name": {
+                                "Name": "name",
+                                "Type": "string",
+                                "Description": "Name of the student."
+                            },
+                            "grade": {
+                                "Name": "grade",
+                                "Type": "int",
+                                "Description": "New grade to be updated."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Public"
+                    },
+                    "average_grade": {
+                        "Description": "Calculates and returns the average grade of the students.",
+                        "Parameters": {},
+                        "Return values": {
+                            "average": {
+                                "Type": "float",
+                                "Description": "Average grade."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "highest_grade": {
+                        "Description": "Returns the student with the highest grade.",
+                        "Parameters": {},
+                        "Return values": {
+                            "student": {
+                                "Type": "dict",
+                                "Description": "Student with the highest grade."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "lowest_grade": {
+                        "Description": "Returns the student with the lowest grade.",
+                        "Parameters": {},
+                        "Return values": {
+                            "student": {
+                                "Type": "dict",
+                                "Description": "Student with the lowest grade."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "grade_distribution": {
+                        "Description": "Provides a grade distribution across all the students.",
+                        "Parameters": {},
+                        "Return values": {
+                            "distribution": {
+                                "Type": "dict",
+                                "Description": "Grade distribution."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "median_grade": {
+                        "Description": "Returns the median grade of students.",
+                        "Parameters": {},
+                        "Return values": {
+                            "median": {
+                                "Type": "float or int",
+                                "Description": "Median grade."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "pass_fail": {
+                        "Description": "Segregates the students based on passing and failing grades.",
+                        "Parameters": {
+                            "passing_grade": {
+                                "Name": "passing_grade",
+                                "Type": "int",
+                                "Description": "Benchmark for passing grade."
+                            }
+                        },
+                        "Return values": {
+                            "students": {
+                                "Type": "list[dict, dict]",
+                                "Description": "List of students who passed, List of students who failed."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "top_n_students": {
+                        "Description": "Returns top 'n' students based on their grades.",
+                        "Parameters": {
+                            "n": {
+                                "Name": "n",
+                                "Type": "int",
+                                "Description": "Number of top students to be returned."
+                            }
+                        },
+                        "Return values": {
+                            "students": {
+                                "Type": "list[dict]",
+                                "Description": "Top 'n' students."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "bottom_n_students": {
+                        "Description": "Returns bottom 'n' students based on their grades.",
+                        "Parameters": {
+                            "n": {
+                                "Name": "n",
+                                "Type": "int",
+                                "Description": "Number of bottom students to be returned."
+                            }
+                        },
+                        "Return values": {
+                            "students": {
+                                "Type": "list[dict]",
+                                "Description": "Bottom 'n' students."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "grade_variance": {
+                        "Description": "Calculates the variance of grades.",
+                        "Parameters": {},
+                        "Return values": {
+                            "variance": {
+                                "Type": "float",
+                                "Description": "Calculated variance."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "grade_standard_deviation": {
+                        "Description": "Calculates the standard deviation of grades.",
+                        "Parameters": {},
+                        "Return values": {
+                            "std_dev": {
+                                "Type": "float",
+                                "Description": "Calculated standard deviation."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "detect_collisions": {
+                        "Description": "Checks if there exists students with the same name.",
+                        "Parameters": {},
+                        "Return values": {
+                            "collisions": {
+                                "Type": "list[string]",
+                                "Description": "List of duplicated student names."
+                            }
+                        },
+                        "Scope": "Public"
+                    }
+                }
+            }
+        }
+    },
+    "Code10Buggy.py": {
+        "File Name": "Code10Buggy.py",
+        "Description": "This code file contains a class that represents a 'BankAccount'. The BankAccount represents a simple model of a bank account with functionalities to deposit, withdraw, and check balance.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "BankAccount": {
+                "Description": "This class represents a 'BankAccount' with basic features such as deposit, withdraw, and check balance.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Constructor method for the BankAccount class. It initializes account owner and balance.",
+                        "Parameters": {
+                            "owner": {
+                                "Name": "owner",
+                                "Type": "unknown",
+                                "Description": "Owner of the bank account."
+                            },
+                            "balance": {
+                                "Name": "balance",
+                                "Type": "unknown",
+                                "Description": "Initial balance of the bank account."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "In-Class"
+                    },
+                    "deposit": {
+                        "Description": "Method to deposit an amount into the bank account. If the amount is negative, a message is returned stating the deposit amount must be positive.",
+                        "Parameters": {
+                            "amount": {
+                                "Name": "amount",
+                                "Type": "unknown",
+                                "Description": "The amount to be deposited."
+                            }
+                        },
+                        "Return values": {
+                            "message": {
+                                "Type": "string",
+                                "Description": "Either shows the deposited amount and new balance, or denies attempt if amount is not positive."
+                            }
+                        },
+                        "Scope": "In-Class"
+                    },
+                    "withdraw": {
+                        "Description": "Method to withdraw an amount from the bank account. If the amount is greater than the balance, a message is returned stating there're insufficient funds. If the amount is not positive, a message is returned stating that withdrawal amount must be positive.",
+                        "Parameters": {
+                            "amount": {
+                                "Name": "amount",
+                                "Type": "unknown",
+                                "Description": "The amount to be withdrawed."
+                            }
+                        },
+                        "Return values": {
+                            "message": {
+                                "Type": "string",
+                                "Description": "Either shows the withdrawn amount and remaining balance, or denies attempt if amount is not positive or insufficient funds."
+                            }
+                        },
+                        "Scope": "In-Class"
+                    },
+                    "check_balance": {
+                        "Description": "Method to check and return the current balance of the bank account.",
+                        "Parameters": {},
+                        "Return values": {
+                            "message": {
+                                "Type": "string",
+                                "Description": "Shows account owner and current balance."
+                            }
+                        },
+                        "Scope": "In-Class"
+                    }
+                }
+            }
+        }
+    },
+    "Code7Buggy.py": {
+        "File Name": "Code7Buggy.py",
+        "Description": "This is a Python code file that creates a simple library system. The Library class can add books, borrow books, return books, and list all available books in the library.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "Library": {
+                "Description": "A class that represents a Library which can manage books.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "The constructor for the Library class.",
+                        "Parameters": {},
+                        "Return values": {},
+                        "Scope": "Public"
+                    },
+                    "add_book": {
+                        "Description": "Method to add a book or books to the library.",
+                        "Parameters": {
+                            "title": {
+                                "Name": "title",
+                                "Type": "string",
+                                "Description": "The title of a book."
+                            },
+                            "author": {
+                                "Name": "author",
+                                "Type": "string",
+                                "Description": "The author of a book."
+                            },
+                            "copies": {
+                                "Name": "copies",
+                                "Type": "integer",
+                                "Description": "The number of copies of a book."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Public"
+                    },
+                    "borrow_book": {
+                        "Description": "Method to borrow a book from the library.",
+                        "Parameters": {
+                            "title": {
+                                "Name": "title",
+                                "Type": "string",
+                                "Description": "The title of the book to be borrowed."
+                            }
+                        },
+                        "Return values": {
+                            "output_message": {
+                                "Type": "string",
+                                "Description": "Gives feedback about succcess or failure of borrowing a book."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "return_book": {
+                        "Description": "Method to return a book to the library.",
+                        "Parameters": {
+                            "title": {
+                                "Name": "title",
+                                "Type": "string",
+                                "Description": "The title of the book to be returned."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Public"
+                    },
+                    "list_books": {
+                        "Description": "Method to list all the books currently in library.",
+                        "Parameters": {},
+                        "Return values": {
+                            "book_list": {
+                                "Type": "string",
+                                "Description": "List of books in the library in string format."
+                            }
+                        },
+                        "Scope": "Public"
+                    }
+                }
+            }
+        }
+    },
+    "Code13Buggy.py": {
+        "File Name": "Code13Buggy.py",
+        "Description": "This Python code file contains two functions: 'fibonacci()' and 'factorial()'. The 'fibonacci()' function is used to calculate the fibonacci sequence up to 'n' terms. The 'factorial()' function is used to calculate the factorial of the input integer 'n'.",
+        "Variables": {},
+        "Functions": {
+            "fibonacci": {
+                "Description": "This function returns the 'n'th number in the Fibonacci series.",
+                "Parameters": {
+                    "n": {
+                        "Name": "n",
+                        "Type": "integer",
+                        "Description": "An integer input for which the Fibonacci number is to be calculated."
+                    }
+                },
+                "Return values": {
+                    "FibonacciNumber": {
+                        "Type": "integer",
+                        "Description": "Returns the 'n'th number in the Fibonacci series."
+                    }
+                },
+                "Scope": "global"
+            },
+            "factorial": {
+                "Description": "This function returns the factorial of an input number 'n'.",
+                "Parameters": {
+                    "n": {
+                        "Name": "n",
+                        "Type": "integer",
+                        "Description": "An integer input for which the factorial is to be calculated."
+                    }
+                },
+                "Return values": {
+                    "FactorialNumber": {
+                        "Type": "integer",
+                        "Description": "Returns the factorial of 'n'."
+                    }
+                },
+                "Scope": "global"
+            }
+        },
+        "Classes": {}
+    },
+    "Code4Buggy.py": {
+        "File Name": "Code4Buggy.py",
+        "Description": "This code contains a class definition for a Convolutional Neural Network (CNN) model using TensorFlow and Keras libraries. The class initializes, compiles, trains, and evaluates the model. However, there are several typos in the code that may need correction.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "CNNModel": {
+                "Description": "This class is responsible for creating and managing the CNN model.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes the CNN Model with the desired layers.",
+                        "Parameters": {
+                            "input_shape": {
+                                "Name": "input_shape",
+                                "Type": "Tuple",
+                                "Description": "Shape of the input images."
+                            },
+                            "num_classes": {
+                                "Name": "num_classes",
+                                "Type": "Integer",
+                                "Description": "Number of classes in the output layer."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Class Scope"
+                    },
+                    "compile_model": {
+                        "Description": "Compiles the CNN Model with optimizer, loss, and metrics.",
+                        "Parameters": {},
+                        "Return values": {},
+                        "Scope": "Class Scope"
+                    },
+                    "train_model": {
+                        "Description": "Trains the CNN Model with the input images and their labels.",
+                        "Parameters": {
+                            "train_images": {
+                                "Name": "train_images",
+                                "Type": "Array",
+                                "Description": "Input training images."
+                            },
+                            "train_labels": {
+                                "Name": "train_labels",
+                                "Type": "Array",
+                                "Description": "Labels for the input training images."
+                            },
+                            "epochs": {
+                                "Name": "epochs",
+                                "Type": "Integer",
+                                "Description": "Number of epochs for training the model."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Class Scope"
+                    },
+                    "evaluate_model": {
+                        "Description": "Evaluates the CNN Model on given test images and their labels.",
+                        "Parameters": {
+                            "test_images": {
+                                "Name": "test_images",
+                                "Type": "Array",
+                                "Description": "Input testing images."
+                            },
+                            "test_labels": {
+                                "Name": "test_labels",
+                                "Type": "Array",
+                                "Description": "Labels for the input testing images."
+                            }
+                        },
+                        "Return values": {
+                            "evaluation_results": {
+                                "Type": "Tuple",
+                                "Description": "Returns the loss and accuracy of the model on test data."
+                            }
+                        },
+                        "Scope": "Class Scope"
+                    }
+                }
+            }
+        }
+    },
+    "Code12Buggy.py": {
+        "File Name": "Code12Buggy.py",
+        "Description": "This code file defines a class 'ToDoList' that can be used to create, mark and display tasks in a ToDo List.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "ToDoList": {
+                "Description": "The class 'ToDoList' models a ToDo list, allowing tasks to be added, marked as complete, and displayed.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "This method initialises a new instance of the 'ToDoList' class, with an empty list for tasks.",
+                        "Parameters": {},
+                        "Return values": {},
+                        "Scope": "Public"
+                    },
+                    "add_task": {
+                        "Description": "This method adds a task to the ToDo list, with the completion status set to false by default.",
+                        "Parameters": {
+                            "task": {
+                                "Name": "task",
+                                "Type": "String",
+                                "Description": "The task to be added to the ToDo list."
+                            }
+                        },
+                        "Return values": {
+                            "add_result": {
+                                "Type": "String",
+                                "Description": "A message confirming the addition of the task."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "complete_task": {
+                        "Description": "This method marks a task as completed in the task list. If the task is not found or already completed, it returns an appropriate message.",
+                        "Parameters": {
+                            "task": {
+                                "Name": "task",
+                                "Type": "String",
+                                "Description": "The task to be marked as complete."
+                            }
+                        },
+                        "Return values": {
+                            "complete_result": {
+                                "Type": "String",
+                                "Description": "A message confirming the completion of the task or indicating the task was not found or already completed."
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "show_tasks": {
+                        "Description": "This method displays all tasks in the ToDo list with their completion status. If no tasks exist, it returns an appropriate message.",
+                        "Parameters": {},
+                        "Return values": {
+                            "show_result": {
+                                "Type": "String",
+                                "Description": "A string representation of all tasks and their completion status or a message indicating no tasks exist."
+                            }
+                        },
+                        "Scope": "Public"
+                    }
+                }
+            }
+        }
+    },
+    "Code8Buggy.py": {
+        "File Name": "Code8Buggy.py",
+        "Description": "This is a Python file which contains two primary functions for manipulating a list of integers: one for doing a bubble sort and another for implementing a binary search.",
+        "Variables": {},
+        "Functions": {
+            "bubble_sort": {
+                "Description": "This function sorts a given list of integers in descending order using the bubble sort algorithm.",
+                "Parameters": {
+                    "arr": {
+                        "Name": "arr",
+                        "Type": "Array",
+                        "Description": "A list of integers to be sorted."
+                    }
+                },
+                "Return values": {
+                    "arr": {
+                        "Type": "Array",
+                        "Description": "A sorted list of integers in descending order."
+                    }
+                },
+                "Scope": "Global"
+            },
+            "binary_search": {
+                "Description": "This function conducts a binary search on a given sorted list for a specified target number.",
+                "Parameters": {
+                    "arr": {
+                        "Name": "arr",
+                        "Type": "Array",
+                        "Description": "A sorted list of integers."
+                    },
+                    "target": {
+                        "Name": "target",
+                        "Type": "Integer",
+                        "Description": "The integer to be searched for within the sorted list."
+                    }
+                },
+                "Return values": {
+                    "index/mid": {
+                        "Type": "Integer",
+                        "Description": "The index of the target in the array if found, else -1."
+                    }
+                },
+                "Scope": "Global"
+            }
+        },
+        "Classes": {}
+    },
+    "Code9Buggy.py": {
+        "File Name": "Code9Buggy.py",
+        "Description": "This file contains a Python script for a simple dice game. Multiple players roll dice and the highest score wins.",
+        "Variables": {
+            "random": {
+                "Description": "Module used for generating pseudo-random numbers",
+                "Type": "module",
+                "Value": "N/A",
+                "Scope": "global"
+            }
+        },
+        "Functions": {},
+        "Classes": {
+            "DiceGame": {
+                "Description": "This class represents a dice game involving multiple players.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes the dice game object with a list of players.",
+                        "Parameters": {
+                            "players": {
+                                "Name": "players",
+                                "Type": "list",
+                                "Description": "List of players participating in the game"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "DiceGame"
+                    },
+                    "roll_dice": {
+                        "Description": "Rolls a dice that gives a random integer between 1 and 6. Note that this function contains an infinite loop.",
+                        "Parameters": {},
+                        "Return values": {
+                            "Random Integer": {
+                                "Type": "int",
+                                "Description": "Random integer between 1 and 6"
+                            }
+                        },
+                        "Scope": "DiceGame"
+                    },
+                    "play_round": {
+                        "Description": "Plays a round where each player rolls the dice and their score is updated.",
+                        "Parameters": {},
+                        "Return values": {},
+                        "Scope": "DiceGame"
+                    },
+                    "get_winner": {
+                        "Description": "Determines the winner(s) of the game by finding the player(s) with the highest score.",
+                        "Parameters": {},
+                        "Return values": {
+                            "Winning Data": {
+                                "Type": "tuple (list, int)",
+                                "Description": "A tuple containing a list of winner(s) and the highest score"
+                            }
+                        },
+                        "Scope": "DiceGame"
+                    }
+                }
+            }
+        }
+    },
+    "Code2Buggy.py": {
+        "File Name": "Code2Buggy.py",
+        "Description": "This file contains a single class called 'FlightTracker' which is used to track different aspects of flights such as their numbers, origins, destinations, durations, prices, dates, times, airlines, planes, seats, classes, passengers, status and captains. The class has methods to get these different aspects as well as compute total flights, average price, longest and shortest flight durations, total passengers, and search flights by specific criteria.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "FlightTracker": {
+                "Description": "A data tracking model for flights with various attributes and methods for getting the attributes and computing some statistics.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes a FlightTracker instance with a dictionary of attribute values.",
+                        "Parameters": {
+                            "flights": {
+                                "Name": "flights",
+                                "Type": "dict",
+                                "Description": "A dictionary containing attributes of the flights."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Public"
+                    },
+                    "get_flight_numbers": {
+                        "Description": "Returns the flight numbers.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_numbers": {
+                                "Type": "list",
+                                "Description": "The list of flight numbers"
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "get_flight_origins": {
+                        "Description": "Returns flight origins.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_origins": {
+                                "Type": "list",
+                                "Description": "List of flight origins"
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "get_total_flights": {
+                        "Description": "Computes the total number of flights.",
+                        "Parameters": {},
+                        "Return values": {
+                            "total_flights": {
+                                "Type": "integer",
+                                "Description": "The total number of flights"
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "...More Methods...": {
+                        "Description": "This class contains several other methods following the same pattern as explained above.",
+                        "Parameters": {},
+                        "Return values": {},
+                        "Scope": "Public"
+                    }
+                }
+            }
+        }
+    },
+    "Code14Buggy.py": {
+        "File Name": "Code14Buggy.py",
+        "Description": "This code is for a simple implementation of the game Rock, Paper, Scissors, where the computer's choice is determined randomly.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "RockPaperScissors": {
+                "Description": "This class encapsulates the game Rock, Paper, Scissors.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "This is the constructor of the class. It doesn't appear to initialize any instance variables.",
+                        "Parameters": {},
+                        "Return values": {},
+                        "Scope": "Public"
+                    },
+                    "play_round": {
+                        "Description": "This method allows a player to play a round of Rock, Paper, Scissors against the computer. The player's choice must be either 'rock', 'paper', or 'scissors'. The computer's choice is determined randomly.",
+                        "Parameters": {
+                            "player_choice": {
+                                "Name": "player_choice",
+                                "Type": "String",
+                                "Description": "This is the choice made by the player for the round."
+                            }
+                        },
+                        "Return values": {
+                            "Results": {
+                                "Type": "String",
+                                "Description": "The results of the round as a string - either 'Invalid choice. Choose 'rock', 'paper', or 'scissors'.', 'It's a tie!', 'You win!', or 'You lose!'."
+                            }
+                        },
+                        "Scope": "Public"
+                    }
+                }
+            }
+        }
+    },
+    "Code15Buggy.py": {
+        "File Name": "Code15Buggy.py",
+        "Description": "A Python file that contains a basic structure for a simple neural network but with an intentional bug in the sigmoid method for illustrative purposes.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "NeuralNetwork": {
+                "Description": "A class representing a simple neural network with an intentional bug.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initialization method for the NeuralNetwork class.",
+                        "Parameters": {
+                            "input_size": {
+                                "Type": "int",
+                                "Description": "Size of the input layer."
+                            },
+                            "hidden_size": {
+                                "Type": "int",
+                                "Description": "Size of the hidden layer."
+                            },
+                            "output_size": {
+                                "Type": "int",
+                                "Description": "Size of the output layer."
+                            },
+                            "learning_rate": {
+                                "Type": "float",
+                                "Description": "The learning rate for the neural network."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "local to NeuralNetwork class"
+                    },
+                    "sigmoid": {
+                        "Description": "A method representing the sigmoid function.",
+                        "Parameters": {
+                            "x": {
+                                "Type": "float",
+                                "Description": "A real number."
+                            }
+                        },
+                        "Return values": {
+                            "value": {
+                                "Type": "float",
+                                "Description": "The computed sigmoid value."
+                            }
+                        },
+                        "Scope": "local to NeuralNetwork class"
+                    },
+                    "sigmoid_derivative": {
+                        "Description": "A method representing the derivative of the sigmoid function.",
+                        "Parameters": {
+                            "x": {
+                                "Type": "float",
+                                "Description": "A real number."
+                            }
+                        },
+                        "Return values": {
+                            "value": {
+                                "Type": "float",
+                                "Description": "The computed derivative value."
+                            }
+                        },
+                        "Scope": "local to NeuralNetwork class"
+                    },
+                    "forward": {
+                        "Description": "A method for performing the forward pass of the neural network.",
+                        "Parameters": {
+                            "X": {
+                                "Type": "numpy array",
+                                "Description": "Input data."
+                            }
+                        },
+                        "Return values": {
+                            "final_output": {
+                                "Type": "float",
+                                "Description": "The computed output of the neural network."
+                            }
+                        },
+                        "Scope": "local to NeuralNetwork class"
+                    },
+                    "backward": {
+                        "Description": "A method for performing the backward pass of the neural network (i.e. backpropagation).",
+                        "Parameters": {
+                            "X": {
+                                "Type": "numpy array",
+                                "Description": "Input data."
+                            },
+                            "y": {
+                                "Type": "numpy array",
+                                "Description": "Target data."
+                            },
+                            "output": {
+                                "Type": "float",
+                                "Description": "The computed output of the neural network."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "local to NeuralNetwork class"
+                    },
+                    "train": {
+                        "Description": "A method for training the neural network using the forward and backward pass methods.",
+                        "Parameters": {
+                            "X": {
+                                "Type": "numpy array",
+                                "Description": "Input data."
+                            },
+                            "y": {
+                                "Type": "numpy array",
+                                "Description": "Target data."
+                            },
+                            "epochs": {
+                                "Type": "int",
+                                "Description": "Number of training epochs."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "local to NeuralNetwork class"
+                    }
+                }
+            }
+        }
+    },
+    "Code3Buggy.py": {
+        "File Name": "Code3Buggy.py",
+        "Description": "A Python code file that implements B+ Trees and Student Database using B+ Tree. It has classes for the nodes of the B+ Tree, B+ Tree itself, Students and the Student Database.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "BPlusTreeNode": {
+                "Description": "Class representing a node of B+ tree",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Constructor method to initialize a B+ Tree node",
+                        "Parameters": {
+                            "leaf": {
+                                "Name": "leaf",
+                                "Type": "boolean",
+                                "Description": "Whether the node is a leaf or not"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Public"
+                    }
+                }
+            },
+            "BPlusTree": {
+                "Description": "Class representing a B+ Tree",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Constructor method to initialize a B+ Tree",
+                        "Parameters": {
+                            "t": {
+                                "Name": "t",
+                                "Type": "unknown",
+                                "Description": "Threshold value for the B+ Tree"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Public"
+                    },
+                    "insert": {
+                        "Description": "Method to insert a key into B+ Tree",
+                        "Parameters": {
+                            "key": {
+                                "Name": "key",
+                                "Type": "unknown",
+                                "Description": "The key to insert"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Public"
+                    }
+                }
+            },
+            "Student": {
+                "Description": "Class representing a Student",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Constructor method to initialize a Student",
+                        "Parameters": {
+                            "student_id": {
+                                "Name": "student_id",
+                                "Type": "unknown",
+                                "Description": "The unique id of the student"
+                            },
+                            "name": {
+                                "Name": "name",
+                                "Type": "string",
+                                "Description": "The name of the student"
+                            },
+                            "age": {
+                                "Name": "age",
+                                "Type": "integer",
+                                "Description": "The age of the student"
+                            },
+                            "gpa": {
+                                "Name": "gpa",
+                                "Type": "floating point",
+                                "Description": "The GPA of the student"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Public"
+                    }
+                }
+            },
+            "StudentDatabase": {
+                "Description": "Class representing a Student Database using a B+ Tree",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Constructor method to initialize a Student Database",
+                        "Parameters": {
+                            "t": {
+                                "Name": "t",
+                                "Type": "unknown",
+                                "Description": "Threshold value for the B+ Tree"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Public"
+                    },
+                    "add_student": {
+                        "Description": "Method to add a student to the database",
+                        "Parameters": {
+                            "student": {
+                                "Name": "student",
+                                "Type": "Student",
+                                "Description": "The Student object to add"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Public"
+                    },
+                    "find_student": {
+                        "Description": "Method to find a student in the database using student id",
+                        "Parameters": {
+                            "student_id": {
+                                "Name": "student_id",
+                                "Type": "unknown",
+                                "Description": "The id of the student to look for"
+                            }
+                        },
+                        "Return values": {
+                            "None or student key": {
+                                "Type": "None or key",
+                                "Description": "The key of the student if found, None otherwise"
+                            }
+                        },
+                        "Scope": "Public"
+                    }
+                }
+            }
+        }
+    },
+    "Code11Buggy.py": {
+        "File Name": "Code11Buggy.py",
+        "Description": "This file contains functions for calculating the areas of a circle, a rectangle, and a triangle.",
+        "Variables": {},
+        "Functions": {
+            "calculate_circle_area": {
+                "Description": "This function calculates the area of a circle given a radius. However, due to an error in the code, it cannot calculate areas for circles with a positive radius.",
+                "Parameters": {
+                    "radius": {
+                        "Name": "radius",
+                        "Type": "numeric",
+                        "Description": "A numeric representation of the radius of a circle."
+                    }
+                },
+                "Return values": {
+                    "Area/Error Message": {
+                        "Type": "float/string",
+                        "Description": "Returns the area of the circle if the radius is not positive; otherwise, returns an error message."
+                    }
+                },
+                "Scope": "global"
+            },
+            "calculate_rectangle_area": {
+                "Description": "This function calculates the area of a rectangle given its length and width.",
+                "Parameters": {
+                    "length": {
+                        "Name": "length",
+                        "Type": "numeric",
+                        "Description": "A numeric representation of the length of the rectangle."
+                    },
+                    "width": {
+                        "Name": "width",
+                        "Type": "numeric",
+                        "Description": "A numeric representation of the width of the rectangle."
+                    }
+                },
+                "Return values": {
+                    "Area/Error Message": {
+                        "Type": "float/string",
+                        "Description": "Returns the area of the rectangle if the length and width are not negative; otherwise, returns an error message."
+                    }
+                },
+                "Scope": "global"
+            },
+            "calculate_triangle_area": {
+                "Description": "This function calculates the area of a triangle given its base and height.",
+                "Parameters": {
+                    "base": {
+                        "Name": "base",
+                        "Type": "numeric",
+                        "Description": "A numeric representation of the base of the triangle."
+                    },
+                    "height": {
+                        "Name": "height",
+                        "Type": "numeric",
+                        "Description": "A numeric representation of the height of the triangle."
+                    }
+                },
+                "Return values": {
+                    "Area/Error Message": {
+                        "Type": "float/string",
+                        "Description": "Returns the area of the triangle if the base and height are not negative; otherwise, returns an error message."
+                    }
+                },
+                "Scope": "global"
+            }
+        },
+        "Classes": {}
+    },
+    "Code1Buggy.py": {
+        "File Name": "Code1Buggy.py",
+        "Description": "This code contains a class called Math for performing arithmetic operations and a function called test to test the Math class. There are some issues with variable naming and calculations in the functions.",
+        "Variables": {
+            "random_number": {
+                "Description": "A variable that stores a random number for testing.",
+                "Type": "Integer",
+                "Value": "5",
+                "Scope": "Global"
+            },
+            "random_code": {
+                "Description": "A variable that stores an arbitrary string value.",
+                "Type": "String",
+                "Value": "'random_code'",
+                "Scope": "Global"
+            }
+        },
+        "Functions": {
+            "test": {
+                "Description": "A function for testing the Math class.",
+                "Parameters": {},
+                "Return values": {},
+                "Scope": "Global"
+            }
+        },
+        "Classes": {
+            "Math": {
+                "Description": "A class for performing basic arithmetic operations.",
+                "Methods": {
+                    "add": {
+                        "Description": "Supposed to add two numbers though subtraction is performed here.",
+                        "Parameters": {
+                            "a": {
+                                "Name": "a",
+                                "Type": "Unknown",
+                                "Description": "First parameter"
+                            },
+                            "b": {
+                                "Name": "b",
+                                "Type": "Unknown",
+                                "Description": "Second parameter"
+                            }
+                        },
+                        "Return values": {
+                            "Result": {
+                                "Type": "Numeric",
+                                "Description": "Returns result of the arithmetic operation"
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "subtract": {
+                        "Description": "Supposed to subtract two numbers yet multiplication is performed here.",
+                        "Parameters": {
+                            "a": {
+                                "Name": "a",
+                                "Type": "Unknown",
+                                "Description": "First parameter"
+                            },
+                            "b": {
+                                "Name": "b",
+                                "Type": "Unknown",
+                                "Description": "Second parameter"
+                            }
+                        },
+                        "Return values": {
+                            "Result": {
+                                "Type": "Numeric",
+                                "Description": "Returns result of the arithmetic operation"
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "multiply": {
+                        "Description": "Expected to multiply two numbers but it will fail due to incorrect variable reference.",
+                        "Parameters": {
+                            "aa": {
+                                "Name": "aa",
+                                "Type": "Unknown",
+                                "Description": "First parameter"
+                            },
+                            "b": {
+                                "Name": "b",
+                                "Type": "Unknown",
+                                "Description": "Second parameter"
+                            }
+                        },
+                        "Return values": {
+                            "Result": {
+                                "Type": "Numeric",
+                                "Description": "Returns result of the arithmetic operation"
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "divide": {
+                        "Description": "Aiming to divide two numbers but it will fail due to incorrect variable reference.",
+                        "Parameters": {
+                            "a": {
+                                "Name": "a",
+                                "Type": "Unknown",
+                                "Description": "First parameter"
+                            },
+                            "b": {
+                                "Name": "b",
+                                "Type": "Unknown",
+                                "Description": "Second parameter"
+                            }
+                        },
+                        "Return values": {
+                            "Result": {
+                                "Type": "Numeric",
+                                "Description": "Returns result of the arithmetic operation"
+                            }
+                        },
+                        "Scope": "Public"
+                    },
+                    "power": {
+                        "Description": "Calculates the power of two numbers but there is an error due to incorrect variable reference.",
+                        "Parameters": {
+                            "a": {
+                                "Name": "a",
+                                "Type": "Unknown",
+                                "Description": "First parameter"
+                            },
+                            "b": {
+                                "Name": "b",
+                                "Type": "Unknown",
+                                "Description": "Second parameter"
+                            }
+                        },
+                        "Return values": {
+                            "Result": {
+                                "Type": "Numeric",
+                                "Description": "Returns result of the arithmetic operation"
+                            }
+                        },
+                        "Scope": "Public"
+                    }
+                }
+            }
+        }
+    },
+    "Code5Buggy.py": {
+        "File Name": "Code5Buggy.py",
+        "Description": "This file contains a single class 'Backend'. This class contains methods to manipulate and manage user credentials in a database. It includes methods for getting, creating, updating, and deleting users. It also includes methods for authentication, changing password, searching users, getting, updating user profile, activating and deactivating users, getting active and inactive users. There's also a redundant method: 'non_existent_method'. There's a redundant '__init__' method too.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "Backend": {
+                "Description": "This class is used for performing operations on a database of users",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes the 'Backend' class. The class takes a 'database' argument within the initializer method.",
+                        "Parameters": {
+                            "database": {
+                                "Name": "database",
+                                "Type": "dict",
+                                "Description": "The database object that is used for storing users' data"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "get_user": {
+                        "Description": "Fetches a user's data from the database using the user's id",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "str/int",
+                                "Description": "ID to identify the user in the database"
+                            }
+                        },
+                        "Return values": {
+                            "user_data": {
+                                "Type": "dict",
+                                "Description": "Data of the user if exists, otherwise None"
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "create_user": {
+                        "Description": "Creates a new user in the database",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "str/int",
+                                "Description": "ID to identify the user in the database"
+                            },
+                            "user_data": {
+                                "Name": "user_data",
+                                "Type": "dict",
+                                "Description": "Data to be stored for the user"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "update_user": {
+                        "Description": "Updates a user's data in the database",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "str/int",
+                                "Description": "ID to identify the user in the database"
+                            },
+                            "user_data": {
+                                "Name": "user_data",
+                                "Type": "dict",
+                                "Description": "Updated data for the user"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "delete_user": {
+                        "Description": "Deletes a user from the database",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "str/int",
+                                "Description": "ID to identify the user in the database"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "list_users": {
+                        "Description": "Returns the list of user ids in the database",
+                        "Parameters": {},
+                        "Return values": {
+                            "user_ids": {
+                                "Type": "list",
+                                "Description": "List of user ids in the database"
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "authenticate_user": {
+                        "Description": "Checks if a user_id and password matches those in the database",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "str/int",
+                                "Description": "ID to identify the user in the database"
+                            },
+                            "password": {
+                                "Name": "password",
+                                "Type": "str",
+                                "Description": "Password to match with the user's password in the database"
+                            }
+                        },
+                        "Return values": {
+                            "authentication_status": {
+                                "Type": "bool",
+                                "Description": "True if user id and password match, otherwise False"
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "change_password": {
+                        "Description": "Changes a user's password",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "str/int",
+                                "Description": "ID to identify the user in the database"
+                            },
+                            "old_password": {
+                                "Name": "old_password",
+                                "Type": "str",
+                                "Description": "Old password of the user"
+                            },
+                            "new_password": {
+                                "Name": "new_password",
+                                "Type": "str",
+                                "Description": "New password for the user"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "search_users": {
+                        "Description": "Fetches users based on a search query",
+                        "Parameters": {
+                            "query": {
+                                "Name": "query",
+                                "Type": "str",
+                                "Description": "Search term for looking up users in the database"
+                            }
+                        },
+                        "Return values": {
+                            "search_results": {
+                                "Type": "dict",
+                                "Description": "User ids and their data that match the search query"
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_user_profile": {
+                        "Description": "Fetches a user's profile",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "str/int",
+                                "Description": "ID to identify the user in the database"
+                            }
+                        },
+                        "Return values": {
+                            "profile_data": {
+                                "Type": "dict",
+                                "Description": "User's profile if exists, otherwise ValueError is raised"
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "update_user_profile": {
+                        "Description": "Updates a user's profile",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "str/int",
+                                "Description": "ID to identify the user in the database"
+                            },
+                            "profile_data": {
+                                "Name": "profile_data",
+                                "Type": "dict",
+                                "Description": "New profile data for the user"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "deactivate_user": {
+                        "Description": "Deactivates a user by setting their 'active' status to False",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "str/int",
+                                "Description": "ID to identify the user in the database"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "activate_user": {
+                        "Description": "Activates a user by setting their 'active' status to True",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "str/int",
+                                "Description": "ID to identify the user in the database"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "get_active_users": {
+                        "Description": "Fetches active users from the database",
+                        "Parameters": {},
+                        "Return values": {
+                            "active_users": {
+                                "Type": "dict",
+                                "Description": "User ids and their data for all active users"
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_inactive_users": {
+                        "Description": "Fetches inactive users from the database",
+                        "Parameters": {},
+                        "Return values": {
+                            "inactive_users": {
+                                "Type": "dict",
+                                "Description": "User ids and their data for all inactive users"
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "non_existent_method": {
+                        "Description": "This method is defined but it does nothing. Its presence here looks like a mistake",
+                        "Parameters": {},
+                        "Return values": {},
+                        "Scope": "public"
+                    }
+                }
+            }
+        }
+    }
+}
