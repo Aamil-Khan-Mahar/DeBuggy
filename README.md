@@ -1,5 +1,24 @@
 # DeBuggy: An Automated Debugging Pipeline
 
+## Contributors
+
+```python
+class Aamil_Khan_Mahar():
+    def details(self):
+        self.email = "25020240@lums.edu.pk"
+        self.roll_number = "25020240"
+        
+class Abdullah_Anwar():
+    def details(self):
+        self.email = "25100214@lums.edu.pk"
+        self.roll_number = "25100214"
+        
+class Saad_Liaquat():
+    def details(self):
+        self.email = "25100259@lums.edu.pk"
+        self.roll_number = "25100259"
+```
+  
 ## Overview
 DeBuggy is a modular and extensible project designed to automate the process of debugging code using cutting-edge LLMs (Large Language Models) and intuitive communication tools. It integrates five key modules into a seamless pipeline to receive, process, and resolve bug reports efficiently.
 
