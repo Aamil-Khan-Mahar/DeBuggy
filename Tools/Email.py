@@ -1,70 +1,78 @@
-'''
-This Contains the Email Tool for the project.
-'''
-
 import time
+import socket
 import dotenv
-from imap_tools import MailBox, AND, OR, NOT
-
+from imap_tools import MailBox, AND
+from json import dumps, loads
 
 class EmailListener:
-    def __init__(self, email: str = dotenv.get_key('.env', 'EMAIL'), password: str = dotenv.get_key('.env', 'APP_PASS'), folder: str = 'INBOX'):
+    def __init__(self, env_path: str = '../.env', folder: str = 'INBOX'):
         """
         Initialize the EmailListener class.
 
-        :param email: The email address to connect to.
-        :param password: The password for the email account (use app password if 2FA is enabled).
+        :param env_path: Path to .env file for credentials
         :param folder: The folder to monitor for new emails. Default is 'INBOX'.
-        :param check_interval: Time interval (in seconds) between checks for new emails.
         """
-        self.reportID = 1
         self.reports = []
         self.new_reports = []
-        self.email = email
-        self.password = password
+        self.reportID = 1
+        self.email = dotenv.get_key(env_path, 'EMAIL')
+        self.password = dotenv.get_key(env_path, 'APP_PASS')
         self.folder = folder
         self.mailbox = None
         self.seen_uids = set()
-
+    
     def connect(self):
-        """Connect to the mailbox."""
+        """
+        Connect to the mailbox and start fetching emails.
+        """
         try:
             self.mailbox = MailBox("imap.gmail.com").login(self.email, self.password, self.folder)
+            print("Connected to mailbox.")
             while True:
                 self.check_emails()
-                time.sleep(3)
+                time.sleep(15)
         except Exception as e:
             print(f"Error: {e}")
-            
+    
     def check_emails(self):
-        """Check for new emails and mark them seen and save the seen UIDs and subject and content as a Single String."""
+        """
+        Check for new emails and save them if not already seen.
+        """
         self.mailbox.folder.set(self.folder)
         for msg in self.mailbox.fetch(AND(seen=False)):
             if msg.uid in self.seen_uids:
                 continue
-            # print(f"New email from {msg.from_} : {msg.subject} : {msg.text}")
             report = {
                 'from': msg.from_,
                 'subject': msg.subject,
-                'text': msg.text.replace('\n', ' '),
-                'reportID': self.reportID,
+                'text': msg.text,
+                'reportID': f'Email-{self.reportID}',
+                'timestamp': time.time()
             }
             self.reports.append(report)
             self.new_reports.append(report)
             self.seen_uids.add(msg.uid)
             self.reportID += 1
-            
-    def get_reports(self):
-        """Return all the reports."""
-        return self.reports
-    
-    def get_new_reports(self):
-        """Return only the new reports."""
-        new_reports = self.new_reports
-        self.new_reports = []
-        return new_reports
+        if len(self.new_reports) > 0:
+            self.send_reports_to_receiver()
 
-# Example usage
-if __name__ == "__main__":
-    listener = EmailListener() 
-    listener.connect()
+    def send_reports_to_receiver(self):
+        """
+        Send the fetched reports to the receiver via the socket.
+        """
+        try:
+            reports_data = {
+                'reports': self.new_reports
+            }
+            reports_str = dumps(reports_data)
+            self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.socket.connect(('127.0.0.1', 9001))
+            self.socket.sendall(reports_str.encode())
+            self.new_reports = []
+            self.socket.close()
+        except Exception as e:
+            print(f"Error sending reports: {e}")
+            
+if __name__ == '__main__':
+    email_listener = EmailListener()
+    email_listener.connect()

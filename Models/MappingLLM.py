@@ -72,7 +72,7 @@ class MappingLLM():
         # try:
         #     if self.choice == 'GPT-4':
         #         self.response = self.model.chat.completions.create(
-        #             model = 'gpt-4',
+        #             model = 'gpt-4o-mini',
         #             messages = [
         #                 {
         #                     'role': 'system',
@@ -87,11 +87,11 @@ class MappingLLM():
         #         return loads(self.response.choices[0].message.content)
         #         # return self.response.choices[0].message.content
         # except Exception as e:
-        #     # print('Error in Mapping')
+        #     print('Error in Mapping', e)
         #     return 'Error in Mapping'
         return {'Inference': 'Imagine this is the response from the model.'}
     
     def get_last_response(self):
-        # return loads(self.response.choices[0].message.content)
+        return loads(self.response.choices[0].message.content)
         # return self.response.choices[0].message.content
         return {'Inference': 'Imagine this is the response from the model.'}

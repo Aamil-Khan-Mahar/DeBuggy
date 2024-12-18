@@ -80,7 +80,7 @@ class DebuggerLLM():
     def get_last_response(self):
         # return loads(self.response.choices[0].message.content)
         # return self.response.choices[0].message.content
-        return {'Inference': 'Imagine this is the response from the model.'}
+        return {'Debugging': 'Imagine this is the response from the model.'}
         
         
 # Test the DebuggerLLM model

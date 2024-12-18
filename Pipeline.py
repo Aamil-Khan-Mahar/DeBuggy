@@ -1,20 +1,11 @@
 '''
-This File contains the full pipeline for the project. Combining all the models and the data fetching and preprocessing steps.
+This File contains the full pipeline for the project.
 '''
 
-
+# importing Models
 from Models.MappingLLM import MappingLLM
-print("MappingLLM Imported.")
 from Models.FinderLLM import FinderLLM
-print("FinderLLM Imported.")
 from Models.DebuggerLLM import DebuggerLLM
-print("DebuggerLLM Imported.")
-
-# importing Tools
-from Tools.Email import EmailListener
-print("EmailListener Imported.")
-from Tools.Slack import SlackListener
-print("SlackListener Imported.")
 
 # importing Libraries
 import time
@@ -24,35 +15,33 @@ import os
 import json
 import subprocess
 import argparse
+from multiprocessing import Process
+import socket
 
-# setting up the Models and Tools
+# Socket as a Receiver
+email_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+slack_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Setting up the Models
 mapping_model = MappingLLM()
 finder_model = FinderLLM()
 debugger_model = DebuggerLLM()
-email_tool = EmailListener()
-slack_tool = SlackListener() 
-
-# Threads for the Tools
-email_thread = threading.Thread(target=email_tool.connect) # Email Tool Thread
-slack_thread = threading.Thread(target=slack_tool.start) # Slack Tool Thread
 
 # CONSTANTS
-global CODE_MAPPINGS, CODE_FILE_NAMES, BUG_REPORTS, REPORTS, REPORT_IDs # Global Variables
-CODE_MAPPINGS = {} # Dictionary of all the Code Mappings
-CODE_FILE_NAMES = set() # Set of all the Code File Names
-BUG_REPORTS = [] # List of all the Bug Reports
-REPORTS = {} # Dictionary of all the Reports
-REPORT_IDs = set() # Set of all the Report IDs
+global CODE_MAPPINGS, CODE_FILE_NAMES, BUG_REPORTS, SLACK_REPORTS, EMAIL_REPORTS, SLACK_REPORT_IDs, EMAIL_REPORT_IDs 
+CODE_MAPPINGS = {}
+CODE_FILE_NAMES = set()
+BUG_REPORTS = []
+SLACK_REPORTS = {}
+EMAIL_REPORTS = {}
+SLACK_REPORT_IDs = set()
+EMAIL_REPORT_IDs = set()
 
-def generate_REPORT_ID():
-    global REPORT_IDs
-    report_id = 1
-    while report_id in REPORT_IDs:
-        report_id += 1
-    REPORT_IDs.add(report_id)
-    return report_id
-
+# Functions for Code Mappings
 def fetch_code_mappings():
+    '''
+    Fetches the Code Mappings from the Json file.
+    '''
     global CODE_MAPPINGS
     global CODE_FILE_NAMES
     with open("./Json/CodeMappings.json", "r") as json_file:
@@ -62,6 +51,10 @@ def fetch_code_mappings():
     print("Code Mappings Fetched.")
 
 def check_and_update_code_mappings():
+    '''
+    Checks if the Code Mappings are updated (Just makes sure all files are included) or not.
+    If not, then updates the Code Mappings.
+    '''
     global CODE_MAPPINGS
     global CODE_FILE_NAMES
     files = os.listdir("./Data/Buggy")
@@ -77,13 +70,100 @@ def check_and_update_code_mappings():
                     CODE_FILE_NAMES.add(filename)
                 else:
                     print(f"Error in Mapping: {filename}")
-    print("Code Mappings Updated.")return {'Inference': 'Imagine this is the response from the model.'}
-    
-    # Saving the updated Code Mappings
+    print("Code Mappings Updated.")
     with open("./Json/CodeMappings.json", "w") as json_file:
         json.dump(CODE_MAPPINGS, json_file, indent=4)
     print("Code Mappings Saved.")
-    print("Filnames:\n", sorted(CODE_FILE_NAMES))
-    
-fetch_code_mappings()
-check_and_update_code_mappings()
+    print("Filenames:\n", sorted(CODE_FILE_NAMES))
+
+# Functions for Bug Reports - Socket Programming
+def setup_email_socket():
+    '''
+    Sets up the Email Socket for receiving the Email Reports.
+    '''
+    try:
+        email_socket.bind(('127.0.0.1', 9001))  
+        email_socket.listen(5)
+        print("Email Socket Started!")
+    except Exception as e:
+        print(f"Error setting up Email socket: {e}")
+
+def setup_slack_socket():
+    '''
+    Sets up the Slack Socket for receiving the Slack Reports.
+    '''
+    try:
+        slack_socket.bind(('127.0.0.1', 9002))
+        slack_socket.listen(5)
+        print("Slack socket listening on port 9002!")
+    except Exception as e:
+        print(f"Error setting up Slack socket: {e}")
+
+def handle_incoming_email_connections():
+    '''
+    Handles the incoming Email Connections.
+    Sends the Email Reports to the receive_report function.
+    '''
+    while True:
+        client_socket, client_address = email_socket.accept()
+        email_data = client_socket.recv(1024).decode()
+        receive_report(email_data)
+        client_socket.close()
+
+def handle_incoming_slack_connections():
+    '''
+    Handles the incoming Slack Connections.
+    Sends the Slack Reports to the receive_report function.
+    '''
+    while True:
+        client_socket, client_address = slack_socket.accept()
+        slack_data = client_socket.recv(1024).decode()
+        receive_report(slack_data)
+        client_socket.close()
+
+def receive_report(report_data):
+    """
+    Adds the received report(s) to the appropriate dictionary (email or slack).
+    :param report_data: JSON string containing report(s) to be processed Key: reports, Value: List of reports
+    """
+    try:
+        reports = json.loads(report_data)
+        for report in reports['reports']:
+            reportID = report['reportID']
+            if reportID not in SLACK_REPORT_IDs and reportID not in EMAIL_REPORT_IDs:
+                if 'from' in report:
+                    EMAIL_REPORTS[reportID] = report
+                    EMAIL_REPORT_IDs.add(reportID)
+                    print(f"Processing email report: {reportID}")
+                elif 'user_id' in report:
+                    SLACK_REPORTS[reportID] = report
+                    SLACK_REPORT_IDs.add(reportID)
+                    print(f"Processing slack report: {reportID}")
+                else:
+                    print(f"Invalid report")
+            else:
+                print(f"ReportID already processed: {reportID}")
+    except Exception as e:
+        print(f"Error processing report: {e}")
+        
+def start_email_server():
+    '''
+    Starts the Email Server.
+    '''
+    setup_email_socket()
+    handle_incoming_email_connections()
+
+def start_slack_server():
+    '''
+    Starts the Slack Server.
+    '''
+    setup_slack_socket()
+    handle_incoming_slack_connections()
+
+if __name__ == "__main__":
+    email_thread = threading.Thread(target=start_email_server)
+    slack_thread = threading.Thread(target=start_slack_server)
+    email_thread.start()
+    slack_thread.start()
+    email_thread.join()
+    slack_thread.join()
