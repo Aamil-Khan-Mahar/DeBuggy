@@ -1,0 +1,1926 @@
+{
+    "Code9Correct.py": {
+        "File Name": "Code9Correct.py",
+        "Description": "This file defines a DiceGame class used to simulate a simple dice game among players. Players roll a die and their scores are tallied, with the option to identify the winner(s) based on the highest score.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "DiceGame": {
+                "Description": "A class to manage the operations of a dice game, including player scoring and determining the winner.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes a new DiceGame instance with a list of players and initializes their scores to zero.",
+                        "Parameters": {
+                            "players": {
+                                "Name": "players",
+                                "Type": "list",
+                                "Description": "A list containing the names of the players participating in the game."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "roll_dice": {
+                        "Description": "Simulates rolling a six-sided die and returns the outcome.",
+                        "Parameters": {},
+                        "Return values": {
+                            "roll": {
+                                "Type": "int",
+                                "Description": "A random integer between 1 and 6, representing the result of the die roll."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "play_round": {
+                        "Description": "Conducts a round of the game where each player rolls the die once and their score is updated based on the roll.",
+                        "Parameters": {},
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "get_winner": {
+                        "Description": "Determines the winner(s) of the game by calculating which player(s) have the highest score.",
+                        "Parameters": {},
+                        "Return values": {
+                            "winners": {
+                                "Type": "list",
+                                "Description": "A list of player names who have the highest score."
+                            },
+                            "max_score": {
+                                "Type": "int",
+                                "Description": "The highest score achieved by any player in the game."
+                            }
+                        },
+                        "Scope": "public"
+                    }
+                }
+            }
+        }
+    },
+    "Code12Correct.py": {
+        "File Name": "Code12Correct.py",
+        "Description": "This code defines a class named ToDoList that manages a list of tasks, allowing tasks to be added, marked as completed, and displayed.",
+        "Variables": {
+            "tasks": {
+                "Description": "A list that stores tasks, each task is represented as a dictionary containing the task description and its completion status.",
+                "Type": "list",
+                "Value": "[]",
+                "Scope": "instance"
+            }
+        },
+        "Functions": {},
+        "Classes": {
+            "ToDoList": {
+                "Description": "A class to handle a to-do list, allowing adding tasks, marking them as completed, and showing the task list.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes a ToDoList instance with an empty list of tasks.",
+                        "Parameters": {},
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "add_task": {
+                        "Description": "Adds a task to the to-do list with a default status of not completed.",
+                        "Parameters": {
+                            "task": {
+                                "Name": "task",
+                                "Type": "str",
+                                "Description": "The description of the task to be added."
+                            }
+                        },
+                        "Return values": {
+                            "Name": {
+                                "Type": "str",
+                                "Description": "A message indicating the task was successfully added."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "complete_task": {
+                        "Description": "Marks a specified task as completed if it exists and is not already completed.",
+                        "Parameters": {
+                            "task": {
+                                "Name": "task",
+                                "Type": "str",
+                                "Description": "The description of the task to be marked as completed."
+                            }
+                        },
+                        "Return values": {
+                            "Name": {
+                                "Type": "str",
+                                "Description": "A message indicating the task completion status or if the task was not found or already completed."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "show_tasks": {
+                        "Description": "Displays all tasks in the to-do list along with their completion status.",
+                        "Parameters": {},
+                        "Return values": {
+                            "Name": {
+                                "Type": "str",
+                                "Description": "A formatted string of all tasks with their completion status, or a message if no tasks are present."
+                            }
+                        },
+                        "Scope": "public"
+                    }
+                }
+            }
+        }
+    },
+    "Code4Correct.py": {
+        "File Name": "Code4Correct.py",
+        "Description": "This file defines a CNNModel class that creates a Convolutional Neural Network (CNN) model using TensorFlow and Keras. The model is built for a specific input shape and number of output classes. It provides methods to compile the model, train it with training data, and evaluate its performance on test data.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "CNNModel": {
+                "Description": "Class representing a Convolutional Neural Network model with methods to compile, train, and evaluate the model.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes the CNN model architecture with specified input shape and number of classes.",
+                        "Parameters": {
+                            "input_shape": {
+                                "Name": "input_shape",
+                                "Type": "tuple",
+                                "Description": "Shape of the input data, typically a 3D tuple representing image dimensions and channels."
+                            },
+                            "num_classes": {
+                                "Name": "num_classes",
+                                "Type": "int",
+                                "Description": "Number of output classes for classification."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "compile_model": {
+                        "Description": "Compiles the model with an optimizer, loss function, and metric for accuracy tracking.",
+                        "Parameters": {},
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "train_model": {
+                        "Description": "Trains the CNN model on the provided training dataset for a specified number of epochs.",
+                        "Parameters": {
+                            "train_images": {
+                                "Name": "train_images",
+                                "Type": "ndarray",
+                                "Description": "Array of training images."
+                            },
+                            "train_labels": {
+                                "Name": "train_labels",
+                                "Type": "ndarray",
+                                "Description": "Array of labels corresponding to the training images."
+                            },
+                            "epochs": {
+                                "Name": "epochs",
+                                "Type": "int",
+                                "Description": "Number of epochs for which to train the model, default is 5."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "evaluate_model": {
+                        "Description": "Evaluates the trained CNN model on the provided test dataset and returns the loss and accuracy.",
+                        "Parameters": {
+                            "test_images": {
+                                "Name": "test_images",
+                                "Type": "ndarray",
+                                "Description": "Array of test images for evaluation."
+                            },
+                            "test_labels": {
+                                "Name": "test_labels",
+                                "Type": "ndarray",
+                                "Description": "Array of labels corresponding to the test images."
+                            }
+                        },
+                        "Return values": {
+                            "result": {
+                                "Type": "tuple",
+                                "Description": "The evaluation result consists of the loss and accuracy of the model on the test dataset."
+                            }
+                        },
+                        "Scope": "public"
+                    }
+                }
+            }
+        }
+    },
+    "Code14Correct.py": {
+        "File Name": "Code14Correct.py",
+        "Description": "This code defines a simple console-based Rock-Paper-Scissors game where a player can play a single round against the computer.",
+        "Variables": {
+            "choices": {
+                "Description": "A list of possible choices in the game: rock, paper, and scissors.",
+                "Type": "list",
+                "Value": [
+                    "rock",
+                    "paper",
+                    "scissors"
+                ],
+                "Scope": "instance"
+            }
+        },
+        "Functions": {},
+        "Classes": {
+            "RockPaperScissors": {
+                "Description": "A class that represents a Rock-Paper-Scissors game and includes methods to play a round.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes the game with a list of possible choices.",
+                        "Parameters": {},
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "play_round": {
+                        "Description": "Plays a round of Rock-Paper-Scissors with the player against the computer.",
+                        "Parameters": {
+                            "player_choice": {
+                                "Name": "player_choice",
+                                "Type": "str",
+                                "Description": "The player's choice, which should be 'rock', 'paper', or 'scissors'."
+                            }
+                        },
+                        "Return values": {
+                            "result": {
+                                "Type": "str",
+                                "Description": "The result of the round, indicating if it's a tie, a win, a loss, or an invalid choice."
+                            }
+                        },
+                        "Scope": "public"
+                    }
+                }
+            }
+        }
+    },
+    "Code2Correct.py": {
+        "File Name": "Code2Correct.py",
+        "Description": "The FlightTracker class is designed to manage and query flight data including numbers, origins, destinations, durations, prices, dates, times, airlines, planes, seats, classes, passengers, status, and captains.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "FlightTracker": {
+                "Description": "A class to track and provide information about flights for a given dataset.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes the FlightTracker with the given flights data.",
+                        "Parameters": {
+                            "flights": {
+                                "Type": "dict",
+                                "Description": "Dictionary containing flights information with keys like numbers, origins, destinations, durations, prices, dates, times, airlines, planes, seats, classes, passengers, status, and captain."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "get_flight_numbers": {
+                        "Description": "Returns a list of flight numbers.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_numbers": {
+                                "Type": "list",
+                                "Description": "List of flight numbers."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flight_origins": {
+                        "Description": "Returns a list of flight origins.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_origins": {
+                                "Type": "list",
+                                "Description": "List of flight origins."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flight_destinations": {
+                        "Description": "Returns a list of flight destinations.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_destinations": {
+                                "Type": "list",
+                                "Description": "List of flight destinations."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flight_durations": {
+                        "Description": "Returns a list of flight durations.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_durations": {
+                                "Type": "list",
+                                "Description": "List of flight durations."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flight_prices": {
+                        "Description": "Returns a list of flight prices.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_prices": {
+                                "Type": "list",
+                                "Description": "List of flight prices."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flight_dates": {
+                        "Description": "Returns a list of flight dates.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_dates": {
+                                "Type": "list",
+                                "Description": "List of flight dates."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flight_times": {
+                        "Description": "Returns a list of flight times.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_times": {
+                                "Type": "list",
+                                "Description": "List of flight times."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flight_airlines": {
+                        "Description": "Returns a list of flight airlines.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_airlines": {
+                                "Type": "list",
+                                "Description": "List of flight airlines."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flight_planes": {
+                        "Description": "Returns a list of flight planes.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_planes": {
+                                "Type": "list",
+                                "Description": "List of flight planes."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flight_seats": {
+                        "Description": "Returns a list of flight seats.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_seats": {
+                                "Type": "list",
+                                "Description": "List of seats available for flights."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flight_classes": {
+                        "Description": "Returns a list of flight classes.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_classes": {
+                                "Type": "list",
+                                "Description": "List of flight classes."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flight_passengers": {
+                        "Description": "Returns a list of passenger counts for each flight.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_passengers": {
+                                "Type": "list",
+                                "Description": "List of passenger counts for each flight."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flight_status": {
+                        "Description": "Returns the status of each flight.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_status": {
+                                "Type": "list",
+                                "Description": "Status of each flight (e.g., on time, delayed)."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flight_captain": {
+                        "Description": "Returns the captain assigned to each flight.",
+                        "Parameters": {},
+                        "Return values": {
+                            "flight_captain": {
+                                "Type": "list",
+                                "Description": "List of captains assigned to each flight."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_total_flights": {
+                        "Description": "Returns the total number of flights being tracked.",
+                        "Parameters": {},
+                        "Return values": {
+                            "total_flights": {
+                                "Type": "int",
+                                "Description": "The total number of flights."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_average_price": {
+                        "Description": "Calculates and returns the average price of all flights.",
+                        "Parameters": {},
+                        "Return values": {
+                            "average_price": {
+                                "Type": "float",
+                                "Description": "The average price of the flights, or 0 if there are no flight prices available."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_longest_flight_duration": {
+                        "Description": "Finds and returns the longest flight duration.",
+                        "Parameters": {},
+                        "Return values": {
+                            "longest_duration": {
+                                "Type": "int",
+                                "Description": "The longest duration of any flight, or 0 if there are no durations available."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_shortest_flight_duration": {
+                        "Description": "Finds and returns the shortest flight duration.",
+                        "Parameters": {},
+                        "Return values": {
+                            "shortest_duration": {
+                                "Type": "int",
+                                "Description": "The shortest duration of any flight, or 0 if there are no durations available."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_total_passengers": {
+                        "Description": "Calculates and returns the total number of passengers across all flights.",
+                        "Parameters": {},
+                        "Return values": {
+                            "total_passengers": {
+                                "Type": "int",
+                                "Description": "The total number of passengers across all flights."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flights_by_airline": {
+                        "Description": "Returns the indices of flights operated by a specific airline.",
+                        "Parameters": {
+                            "airline": {
+                                "Type": "str",
+                                "Description": "The name of the airline to search for."
+                            }
+                        },
+                        "Return values": {
+                            "flights_indices": {
+                                "Type": "list",
+                                "Description": "List of indices representing flights operated by the specified airline."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flights_by_origin": {
+                        "Description": "Returns the indices of flights originating from a specific origin.",
+                        "Parameters": {
+                            "origin": {
+                                "Type": "str",
+                                "Description": "The location of the flight origin to search for."
+                            }
+                        },
+                        "Return values": {
+                            "flights_indices": {
+                                "Type": "list",
+                                "Description": "List of indices representing flights from the specified origin."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flights_by_destination": {
+                        "Description": "Returns the indices of flights destined for a specific destination.",
+                        "Parameters": {
+                            "destination": {
+                                "Type": "str",
+                                "Description": "The location of the flight destination to search for."
+                            }
+                        },
+                        "Return values": {
+                            "flights_indices": {
+                                "Type": "list",
+                                "Description": "List of indices representing flights to the specified destination."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flights_by_date": {
+                        "Description": "Returns the indices of flights scheduled on a specific date.",
+                        "Parameters": {
+                            "date": {
+                                "Type": "str",
+                                "Description": "The date to search flights for (format should fit the ones used in the flights data)."
+                            }
+                        },
+                        "Return values": {
+                            "flights_indices": {
+                                "Type": "list",
+                                "Description": "List of indices representing flights on the specified date."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flights_by_status": {
+                        "Description": "Returns the indices of flights with a specific status.",
+                        "Parameters": {
+                            "status": {
+                                "Type": "str",
+                                "Description": "The status of the flights to search for (e.g., on time, delayed)."
+                            }
+                        },
+                        "Return values": {
+                            "flights_indices": {
+                                "Type": "list",
+                                "Description": "List of indices representing flights with the specified status."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flights_by_class": {
+                        "Description": "Returns the indices of flights with a specific class.",
+                        "Parameters": {
+                            "flight_class": {
+                                "Type": "str",
+                                "Description": "The class of the flights to search for (e.g., economy, business)."
+                            }
+                        },
+                        "Return values": {
+                            "flights_indices": {
+                                "Type": "list",
+                                "Description": "List of indices representing flights with the specified class."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flights_by_captain": {
+                        "Description": "Returns the indices of flights with a specific captain.",
+                        "Parameters": {
+                            "captain": {
+                                "Type": "str",
+                                "Description": "The name of the captain to search for."
+                            }
+                        },
+                        "Return values": {
+                            "flights_indices": {
+                                "Type": "list",
+                                "Description": "List of indices representing flights with the specified captain."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flights_by_plane": {
+                        "Description": "Returns the indices of flights operated by a specific plane.",
+                        "Parameters": {
+                            "plane": {
+                                "Type": "str",
+                                "Description": "The model or type of the plane to search for."
+                            }
+                        },
+                        "Return values": {
+                            "flights_indices": {
+                                "Type": "list",
+                                "Description": "List of indices representing flights operated by the specified plane."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "get_flights_by_time": {
+                        "Description": "Returns the indices of flights scheduled at a specific time.",
+                        "Parameters": {
+                            "time": {
+                                "Type": "str",
+                                "Description": "The time of the flights to search for (format should fit the ones used in the flights data)."
+                            }
+                        },
+                        "Return values": {
+                            "flights_indices": {
+                                "Type": "list",
+                                "Description": "List of indices representing flights scheduled at the specified time."
+                            }
+                        },
+                        "Scope": "public"
+                    }
+                }
+            }
+        }
+    },
+    "Code13Correct.py": {
+        "File Name": "Code13Correct.py",
+        "Description": "This file contains implementations of two mathematical functions: Fibonacci and Factorial. Both functions are implemented recursively and include input validation.",
+        "Variables": {},
+        "Functions": {
+            "fibonacci": {
+                "Description": "Calculates the nth Fibonacci number recursively with input validation for non-negative integers.",
+                "Parameters": {
+                    "n": {
+                        "Type": "int",
+                        "Description": "The position in the Fibonacci sequence for which the Fibonacci number is to be calculated."
+                    }
+                },
+                "Return values": {
+                    "result": {
+                        "Type": "int or str",
+                        "Description": "Returns the nth Fibonacci number if input is valid; otherwise, returns an error message."
+                    }
+                },
+                "Scope": "global"
+            },
+            "factorial": {
+                "Description": "Calculates the factorial of a non-negative integer n recursively with input validation.",
+                "Parameters": {
+                    "n": {
+                        "Type": "int",
+                        "Description": "The number for which the factorial is to be calculated."
+                    }
+                },
+                "Return values": {
+                    "result": {
+                        "Type": "int or str",
+                        "Description": "Returns the factorial of n if input is valid; otherwise, returns an error message."
+                    }
+                },
+                "Scope": "global"
+            }
+        },
+        "Classes": {}
+    },
+    "Code8Correct.py": {
+        "File Name": "Code8Correct.py",
+        "Description": "This file contains implementations of two classic algorithms: bubble_sort for sorting an array and binary_search for finding the index of a target value in a sorted array.",
+        "Variables": {},
+        "Functions": {
+            "bubble_sort": {
+                "Description": "Sorts an array using the bubble sort algorithm. It repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. The pass through the list is repeated until no swaps are needed.",
+                "Parameters": {
+                    "arr": {
+                        "Type": "list",
+                        "Description": "The array to be sorted."
+                    }
+                },
+                "Return values": {
+                    "arr": {
+                        "Type": "list",
+                        "Description": "The sorted version of the input array in ascending order."
+                    }
+                },
+                "Scope": "global"
+            },
+            "binary_search": {
+                "Description": "Performs a binary search on a sorted array to find the index of a target value. It divides the search interval in half until the target value is found or the interval is empty.",
+                "Parameters": {
+                    "arr": {
+                        "Type": "list",
+                        "Description": "The sorted array in which to search for the target value."
+                    },
+                    "target": {
+                        "Type": "int",
+                        "Description": "The value to search for in the array."
+                    }
+                },
+                "Return values": {
+                    "index": {
+                        "Type": "int",
+                        "Description": "The index of the target value in the array, or -1 if the target is not in the array."
+                    }
+                },
+                "Scope": "global"
+            }
+        },
+        "Classes": {}
+    },
+    "Code5Correct.py": {
+        "File Name": "Code5Correct.py",
+        "Description": "The code defines a class named 'Backend' which interacts with a database to manage user information. It includes functionalities to create, update, delete, and search users, as well as methods for authentication, password management, and user activation/deactivation.",
+        "Variables": {
+            "self.database": {
+                "Description": "Internal storage representing the database of users.",
+                "Type": "dict",
+                "Value": "Initial value assigned in constructor.",
+                "Scope": "Instance"
+            }
+        },
+        "Functions": {},
+        "Classes": {
+            "Backend": {
+                "Description": "A class that handles operations related to user data within a database.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes the Backend class with a database reference.",
+                        "Parameters": {
+                            "database": {
+                                "Name": "database",
+                                "Type": "dict",
+                                "Description": "A dictionary representing the user database."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Instance"
+                    },
+                    "get_user": {
+                        "Description": "Retrieves a user from the database by user_id.",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "Any",
+                                "Description": "The unique identifier for the user."
+                            }
+                        },
+                        "Return values": {
+                            "return": {
+                                "Type": "dict or None",
+                                "Description": "The user's data or None if user does not exist."
+                            }
+                        },
+                        "Scope": "Instance"
+                    },
+                    "create_user": {
+                        "Description": "Creates a new user with the given user_id and user_data.",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "Any",
+                                "Description": "The unique identifier for the new user."
+                            },
+                            "user_data": {
+                                "Name": "user_data",
+                                "Type": "dict",
+                                "Description": "The information for the user."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Instance"
+                    },
+                    "update_user": {
+                        "Description": "Updates the data of an existing user.",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "Any",
+                                "Description": "The unique identifier for the user."
+                            },
+                            "user_data": {
+                                "Name": "user_data",
+                                "Type": "dict",
+                                "Description": "The updated information for the user."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Instance"
+                    },
+                    "delete_user": {
+                        "Description": "Deletes a user from the database.",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "Any",
+                                "Description": "The unique identifier for the user."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Instance"
+                    },
+                    "list_users": {
+                        "Description": "Lists all user IDs in the database.",
+                        "Parameters": {},
+                        "Return values": {
+                            "return": {
+                                "Type": "list",
+                                "Description": "A list of all user IDs."
+                            }
+                        },
+                        "Scope": "Instance"
+                    },
+                    "authenticate_user": {
+                        "Description": "Authenticates a user by verifying the password.",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "Any",
+                                "Description": "The unique identifier for the user."
+                            },
+                            "password": {
+                                "Name": "password",
+                                "Type": "str",
+                                "Description": "The password to verify."
+                            }
+                        },
+                        "Return values": {
+                            "return": {
+                                "Type": "bool",
+                                "Description": "True if authentication is successful, False otherwise."
+                            }
+                        },
+                        "Scope": "Instance"
+                    },
+                    "change_password": {
+                        "Description": "Changes the password for a user if the old password matches.",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "Any",
+                                "Description": "The unique identifier for the user."
+                            },
+                            "old_password": {
+                                "Name": "old_password",
+                                "Type": "str",
+                                "Description": "The current password for verification."
+                            },
+                            "new_password": {
+                                "Name": "new_password",
+                                "Type": "str",
+                                "Description": "The new password to set."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Instance"
+                    },
+                    "search_users": {
+                        "Description": "Searches for users whose IDs or data contain a specified query.",
+                        "Parameters": {
+                            "query": {
+                                "Name": "query",
+                                "Type": "str",
+                                "Description": "The search term to look for in user IDs or data."
+                            }
+                        },
+                        "Return values": {
+                            "return": {
+                                "Type": "dict",
+                                "Description": "A dictionary of users matching the search query."
+                            }
+                        },
+                        "Scope": "Instance"
+                    },
+                    "get_user_profile": {
+                        "Description": "Fetches the profile of a given user.",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "Any",
+                                "Description": "The unique identifier for the user."
+                            }
+                        },
+                        "Return values": {
+                            "return": {
+                                "Type": "dict",
+                                "Description": "A dictionary containing user_id and profile data."
+                            }
+                        },
+                        "Scope": "Instance"
+                    },
+                    "update_user_profile": {
+                        "Description": "Updates the profile data of a user.",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "Any",
+                                "Description": "The unique identifier for the user."
+                            },
+                            "profile_data": {
+                                "Name": "profile_data",
+                                "Type": "dict",
+                                "Description": "The new profile data for the user."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Instance"
+                    },
+                    "deactivate_user": {
+                        "Description": "Deactivates a user's account.",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "Any",
+                                "Description": "The unique identifier for the user."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Instance"
+                    },
+                    "activate_user": {
+                        "Description": "Activates a user's account.",
+                        "Parameters": {
+                            "user_id": {
+                                "Name": "user_id",
+                                "Type": "Any",
+                                "Description": "The unique identifier for the user."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Instance"
+                    },
+                    "get_active_users": {
+                        "Description": "Returns a dictionary of active users.",
+                        "Parameters": {},
+                        "Return values": {
+                            "return": {
+                                "Type": "dict",
+                                "Description": "A dictionary of active user IDs and their data."
+                            }
+                        },
+                        "Scope": "Instance"
+                    },
+                    "get_inactive_users": {
+                        "Description": "Returns a dictionary of inactive users.",
+                        "Parameters": {},
+                        "Return values": {
+                            "return": {
+                                "Type": "dict",
+                                "Description": "A dictionary of inactive user IDs and their data."
+                            }
+                        },
+                        "Scope": "Instance"
+                    }
+                }
+            }
+        }
+    },
+    "Code15Correct.py": {
+        "File Name": "Code15Correct.py",
+        "Description": "This code defines a simple feedforward neural network using numpy for learning through backpropagation. It includes methods for initialization, forward pass calculation, backward pass adaptation, and training over multiple epochs.",
+        "Variables": {
+            "weights_input_hidden": {
+                "Description": "Weights matrix for connections from input layer to hidden layer",
+                "Type": "numpy.ndarray",
+                "Value": "Random values close to zero, scaled for input to hidden connections",
+                "Scope": "Instance"
+            },
+            "bias_hidden": {
+                "Description": "Bias vector for the hidden layer neurons",
+                "Type": "numpy.ndarray",
+                "Value": "Zeros for each hidden layer neuron",
+                "Scope": "Instance"
+            },
+            "weights_hidden_output": {
+                "Description": "Weights matrix for connections from hidden layer to output layer",
+                "Type": "numpy.ndarray",
+                "Value": "Random values close to zero, scaled for hidden to output connections",
+                "Scope": "Instance"
+            },
+            "bias_output": {
+                "Description": "Bias vector for the output layer neurons",
+                "Type": "numpy.ndarray",
+                "Value": "Zeros for each output layer neuron",
+                "Scope": "Instance"
+            },
+            "learning_rate": {
+                "Description": "Learning rate for training the neural network",
+                "Type": "float",
+                "Value": "0.01 by default",
+                "Scope": "Instance"
+            },
+            "hidden_input": {
+                "Description": "Aggregate input to the hidden layer before activation",
+                "Type": "numpy.ndarray",
+                "Value": "Computed during forward pass",
+                "Scope": "Instance"
+            },
+            "hidden_output": {
+                "Description": "Output from the hidden layer after activation",
+                "Type": "numpy.ndarray",
+                "Value": "Computed during forward pass",
+                "Scope": "Instance"
+            },
+            "final_input": {
+                "Description": "Aggregate input to the output layer before activation",
+                "Type": "numpy.ndarray",
+                "Value": "Computed during forward pass",
+                "Scope": "Instance"
+            },
+            "final_output": {
+                "Description": "Output from the output layer after activation",
+                "Type": "numpy.ndarray",
+                "Value": "Computed during forward pass",
+                "Scope": "Instance"
+            }
+        },
+        "Functions": {},
+        "Classes": {
+            "NeuralNetwork": {
+                "Description": "Represents a simple neural network with one hidden layer, implements forward and backward propagation methods",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes the neural network with given sizes and learning rate, setting up weights and biases",
+                        "Parameters": {
+                            "input_size": {
+                                "Type": "int",
+                                "Description": "Number of input features"
+                            },
+                            "hidden_size": {
+                                "Type": "int",
+                                "Description": "Number of neurons in the hidden layer"
+                            },
+                            "output_size": {
+                                "Type": "int",
+                                "Description": "Number of output neurons"
+                            },
+                            "learning_rate": {
+                                "Type": "float",
+                                "Description": "Learning rate for weight updates, default is 0.01"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Instance"
+                    },
+                    "sigmoid": {
+                        "Description": "Applies sigmoid activation function to a given input",
+                        "Parameters": {
+                            "x": {
+                                "Type": "numpy.ndarray",
+                                "Description": "Input data to apply sigmoid to"
+                            }
+                        },
+                        "Return values": {
+                            "output": {
+                                "Type": "numpy.ndarray",
+                                "Description": "Transformed data after applying sigmoid function"
+                            }
+                        },
+                        "Scope": "Instance"
+                    },
+                    "sigmoid_derivative": {
+                        "Description": "Calculates the derivative of the sigmoid function",
+                        "Parameters": {
+                            "x": {
+                                "Type": "numpy.ndarray",
+                                "Description": "Output data to apply sigmoid derivative to"
+                            }
+                        },
+                        "Return values": {
+                            "derivative": {
+                                "Type": "numpy.ndarray",
+                                "Description": "Calculated derivative of the sigmoid function"
+                            }
+                        },
+                        "Scope": "Instance"
+                    },
+                    "forward": {
+                        "Description": "Executes the forward pass, computing the neural network's output for given input data",
+                        "Parameters": {
+                            "X": {
+                                "Type": "numpy.ndarray",
+                                "Description": "Input data to feed through the network"
+                            }
+                        },
+                        "Return values": {
+                            "final_output": {
+                                "Type": "numpy.ndarray",
+                                "Description": "Output of the neural network after forward pass"
+                            }
+                        },
+                        "Scope": "Instance"
+                    },
+                    "backward": {
+                        "Description": "Performs the backward pass, adjusting weights and biases based on errors",
+                        "Parameters": {
+                            "X": {
+                                "Type": "numpy.ndarray",
+                                "Description": "Original input data"
+                            },
+                            "y": {
+                                "Type": "numpy.ndarray",
+                                "Description": "True output labels"
+                            },
+                            "output": {
+                                "Type": "numpy.ndarray",
+                                "Description": "Predicted output to compute the error from"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Instance"
+                    },
+                    "train": {
+                        "Description": "Trains the neural network for a specified number of epochs using input-output data",
+                        "Parameters": {
+                            "X": {
+                                "Type": "numpy.ndarray",
+                                "Description": "Training input data"
+                            },
+                            "y": {
+                                "Type": "numpy.ndarray",
+                                "Description": "True output labels for training"
+                            },
+                            "epochs": {
+                                "Type": "int",
+                                "Description": "Number of training iterations"
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "Instance"
+                    }
+                }
+            }
+        }
+    },
+    "Code3Correct.py": {
+        "File Name": "Code3Correct.py",
+        "Description": "This code defines a B+ Tree data structure and a simple student database using the B+ Tree. It includes implementation of BPlusTree and StudentDatabase classes along with supporting methods for insertion and search operations.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "BPlusTreeNode": {
+                "Description": "Represents a node in the B+ Tree, which can be either a leaf or an internal node, containing keys and children.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes a B+ tree node.",
+                        "Parameters": {
+                            "leaf": {
+                                "Name": "leaf",
+                                "Type": "bool",
+                                "Description": "Indicates if the node is a leaf."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    }
+                }
+            },
+            "BPlusTree": {
+                "Description": "Implementation of a B+ Tree with methods for insertion and searching.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes a B+ Tree with the specified minimum degree.",
+                        "Parameters": {
+                            "t": {
+                                "Name": "t",
+                                "Type": "int",
+                                "Description": "Minimum degree of the B+ Tree."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "insert": {
+                        "Description": "Inserts a key into the B+ Tree.",
+                        "Parameters": {
+                            "key": {
+                                "Name": "key",
+                                "Type": "int/str",
+                                "Description": "The key to be inserted into the tree."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "insert_non_full": {
+                        "Description": "Inserts a key into a non-full node of the tree.",
+                        "Parameters": {
+                            "node": {
+                                "Name": "node",
+                                "Type": "BPlusTreeNode",
+                                "Description": "The node to insert the key into."
+                            },
+                            "key": {
+                                "Name": "key",
+                                "Type": "int/str",
+                                "Description": "The key to be inserted."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "private"
+                    },
+                    "split_child": {
+                        "Description": "Splits a child node into two when it becomes full.",
+                        "Parameters": {
+                            "parent": {
+                                "Name": "parent",
+                                "Type": "BPlusTreeNode",
+                                "Description": "Parent node of the child node to be split."
+                            },
+                            "i": {
+                                "Name": "i",
+                                "Type": "int",
+                                "Description": "Index of the child in the parent node."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "private"
+                    },
+                    "search": {
+                        "Description": "Searches for a key in the B+ Tree and returns its location.",
+                        "Parameters": {
+                            "key": {
+                                "Name": "key",
+                                "Type": "int/str",
+                                "Description": "The key to be searched in the tree."
+                            },
+                            "node": {
+                                "Name": "node",
+                                "Type": "BPlusTreeNode",
+                                "Description": "The node to start the search from. Defaults to root."
+                            }
+                        },
+                        "Return values": {
+                            "result": {
+                                "Type": "tuple or None",
+                                "Description": "Returns the node and index of the key if found, else None."
+                            }
+                        },
+                        "Scope": "public"
+                    }
+                }
+            },
+            "Student": {
+                "Description": "Represents a student with basic attributes like student ID, name, age, and GPA.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes a student with an ID, name, age, and GPA.",
+                        "Parameters": {
+                            "student_id": {
+                                "Name": "student_id",
+                                "Type": "int/str",
+                                "Description": "Identifier for the student."
+                            },
+                            "name": {
+                                "Name": "name",
+                                "Type": "str",
+                                "Description": "Name of the student."
+                            },
+                            "age": {
+                                "Name": "age",
+                                "Type": "int",
+                                "Description": "Age of the student."
+                            },
+                            "gpa": {
+                                "Name": "gpa",
+                                "Type": "float",
+                                "Description": "GPA of the student."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    }
+                }
+            },
+            "StudentDatabase": {
+                "Description": "A simple database for storing and retrieving student information using a B+ Tree.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes the student database with a B+ tree of specified minimum degree.",
+                        "Parameters": {
+                            "t": {
+                                "Name": "t",
+                                "Type": "int",
+                                "Description": "The minimum degree of the B+ tree used."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "add_student": {
+                        "Description": "Adds a student to the database by inserting their student ID into the B+ Tree.",
+                        "Parameters": {
+                            "student": {
+                                "Name": "student",
+                                "Type": "Student",
+                                "Description": "The student object to be added."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "find_student": {
+                        "Description": "Finds a student in the database based on student ID.",
+                        "Parameters": {
+                            "student_id": {
+                                "Name": "student_id",
+                                "Type": "int/str",
+                                "Description": "ID of the student to be found."
+                            }
+                        },
+                        "Return values": {
+                            "student": {
+                                "Type": "int/str or None",
+                                "Description": "Returns the student ID if found, else None."
+                            }
+                        },
+                        "Scope": "public"
+                    }
+                }
+            }
+        }
+    },
+    "Code10Correct.py": {
+        "File Name": "Code10Correct.py",
+        "Description": "This code defines a BankAccount class that simulates basic bank account operations such as deposits, withdrawals, and balance checking.",
+        "Variables": {
+            "owner": {
+                "Description": "The owner of the bank account.",
+                "Type": "string",
+                "Value": "Initialized in constructor",
+                "Scope": "Instance"
+            },
+            "balance": {
+                "Description": "The current balance of the bank account.",
+                "Type": "float or int",
+                "Value": "Initialized in constructor with default of 0",
+                "Scope": "Instance"
+            }
+        },
+        "Functions": {},
+        "Classes": {
+            "BankAccount": {
+                "Description": "A class that represents a bank account with basic functionalities such as deposit, withdrawal, and balance checking.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Constructor method to initialize a bank account with an owner and an optional starting balance.",
+                        "Parameters": {
+                            "owner": {
+                                "Name": "owner",
+                                "Type": "string",
+                                "Description": "The owner of the account."
+                            },
+                            "balance": {
+                                "Name": "balance",
+                                "Type": "float or int",
+                                "Description": "The starting balance. Defaults to 0 if not provided."
+                            }
+                        },
+                        "Return values": {
+                            "None": {
+                                "Type": "None",
+                                "Description": "Constructor does not return a value."
+                            }
+                        },
+                        "Scope": "Instance"
+                    },
+                    "deposit": {
+                        "Description": "Adds the specified amount to the account balance if it is positive.",
+                        "Parameters": {
+                            "amount": {
+                                "Name": "amount",
+                                "Type": "float or int",
+                                "Description": "The amount to deposit into the account. Must be positive."
+                            }
+                        },
+                        "Return values": {
+                            "string": {
+                                "Type": "string",
+                                "Description": "A message indicating the deposit status and new balance if successful."
+                            }
+                        },
+                        "Scope": "Instance"
+                    },
+                    "withdraw": {
+                        "Description": "Subtracts the specified amount from the account balance if it is positive and funds are sufficient.",
+                        "Parameters": {
+                            "amount": {
+                                "Name": "amount",
+                                "Type": "float or int",
+                                "Description": "The amount to withdraw from the account."
+                            }
+                        },
+                        "Return values": {
+                            "string": {
+                                "Type": "string",
+                                "Description": "A message indicating the withdrawal status and remaining balance if successful, or an error message otherwise."
+                            }
+                        },
+                        "Scope": "Instance"
+                    },
+                    "check_balance": {
+                        "Description": "Returns the account owner's name and current balance.",
+                        "Parameters": {},
+                        "Return values": {
+                            "string": {
+                                "Type": "string",
+                                "Description": "A message displaying the account owner's name and current balance."
+                            }
+                        },
+                        "Scope": "Instance"
+                    }
+                }
+            }
+        }
+    },
+    "Code6Correct.py": {
+        "File Name": "Code6Correct.py",
+        "Description": "This file defines a class `RelativeGrader` which provides various functionalities for managing and analyzing student grading data, including adding/removing students, retrieving student information, computing grade statistics, and detecting name collisions.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "RelativeGrader": {
+                "Description": "A class to manage and perform relative grading tasks on a list of student dictionaries with keys 'name' and 'grade'.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes the RelativeGrader with a list of students.",
+                        "Parameters": {
+                            "students": {
+                                "Name": "students",
+                                "Type": "list",
+                                "Description": "A list of dictionaries where each dictionary contains 'name' and 'grade' keys."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "add_student": {
+                        "Description": "Adds a student to the list.",
+                        "Parameters": {
+                            "student": {
+                                "Name": "student",
+                                "Type": "dict",
+                                "Description": "A dictionary containing 'name' and 'grade' of the student to be added."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "remove_student": {
+                        "Description": "Removes a student from the list.",
+                        "Parameters": {
+                            "student": {
+                                "Name": "student",
+                                "Type": "dict",
+                                "Description": "A dictionary containing 'name' and 'grade' of the student to be removed."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "get_student": {
+                        "Description": "Retrieves a student's information by name.",
+                        "Parameters": {
+                            "name": {
+                                "Name": "name",
+                                "Type": "str",
+                                "Description": "The name of the student to search for."
+                            }
+                        },
+                        "Return values": {
+                            "Name": {
+                                "Type": "dict or None",
+                                "Description": "Returns the student dictionary if found, else None."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "update_grade": {
+                        "Description": "Updates a student's grade.",
+                        "Parameters": {
+                            "name": {
+                                "Name": "name",
+                                "Type": "str",
+                                "Description": "The name of the student whose grade is to be updated."
+                            },
+                            "grade": {
+                                "Name": "grade",
+                                "Type": "numeric",
+                                "Description": "The new grade to be assigned to the student."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "average_grade": {
+                        "Description": "Calculates the average grade of all students.",
+                        "Parameters": {},
+                        "Return values": {
+                            "Name": {
+                                "Type": "float",
+                                "Description": "The average grade."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "highest_grade": {
+                        "Description": "Finds the student with the highest grade.",
+                        "Parameters": {},
+                        "Return values": {
+                            "Name": {
+                                "Type": "dict",
+                                "Description": "The student dictionary with the highest grade."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "lowest_grade": {
+                        "Description": "Finds the student with the lowest grade.",
+                        "Parameters": {},
+                        "Return values": {
+                            "Name": {
+                                "Type": "dict",
+                                "Description": "The student dictionary with the lowest grade."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "grade_distribution": {
+                        "Description": "Calculates the distribution of grades among the students.",
+                        "Parameters": {},
+                        "Return values": {
+                            "Name": {
+                                "Type": "dict",
+                                "Description": "A dictionary where the keys are grades and values are the number of occurrences."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "median_grade": {
+                        "Description": "Finds the median grade of all students.",
+                        "Parameters": {},
+                        "Return values": {
+                            "Name": {
+                                "Type": "float",
+                                "Description": "The median grade value."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "pass_fail": {
+                        "Description": "Determines passing and failing students based on a specified passing grade.",
+                        "Parameters": {
+                            "passing_grade": {
+                                "Name": "passing_grade",
+                                "Type": "numeric",
+                                "Description": "The grade threshold required to pass."
+                            }
+                        },
+                        "Return values": {
+                            "Name": {
+                                "Type": "tuple of lists",
+                                "Description": "Two lists: first contains passed students, second contains failed students."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "top_n_students": {
+                        "Description": "Retrieves the top N students based on their grades.",
+                        "Parameters": {
+                            "n": {
+                                "Name": "n",
+                                "Type": "int",
+                                "Description": "Number of top students to retrieve."
+                            }
+                        },
+                        "Return values": {
+                            "Name": {
+                                "Type": "list",
+                                "Description": "A list of the top N student dictionaries."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "bottom_n_students": {
+                        "Description": "Retrieves the bottom N students based on their grades.",
+                        "Parameters": {
+                            "n": {
+                                "Name": "n",
+                                "Type": "int",
+                                "Description": "Number of bottom students to retrieve."
+                            }
+                        },
+                        "Return values": {
+                            "Name": {
+                                "Type": "list",
+                                "Description": "A list of the bottom N student dictionaries."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "grade_variance": {
+                        "Description": "Calculates the variance of the grades.",
+                        "Parameters": {},
+                        "Return values": {
+                            "Name": {
+                                "Type": "float",
+                                "Description": "The variance of the grades."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "grade_standard_deviation": {
+                        "Description": "Calculates the standard deviation of the grades.",
+                        "Parameters": {},
+                        "Return values": {
+                            "Name": {
+                                "Type": "float",
+                                "Description": "The standard deviation of the grades."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "detect_collisions": {
+                        "Description": "Detects students with duplicate names.",
+                        "Parameters": {},
+                        "Return values": {
+                            "Name": {
+                                "Type": "list",
+                                "Description": "A list of names that appear more than once in the students list."
+                            }
+                        },
+                        "Scope": "public"
+                    }
+                }
+            }
+        }
+    },
+    "Code11Correct.py": {
+        "File Name": "Code11Correct.py",
+        "Description": "This script provides a set of functions to calculate the areas of various geometric shapes: circles, rectangles, and triangles. It includes basic error handling to manage cases of negative inputs.",
+        "Variables": {},
+        "Functions": {
+            "calculate_circle_area": {
+                "Description": "Calculates the area of a circle given its radius. Returns an error message for negative radius.",
+                "Parameters": {
+                    "radius": {
+                        "Type": "float",
+                        "Description": "The radius of the circle."
+                    }
+                },
+                "Return values": {
+                    "value": {
+                        "Type": "float or str",
+                        "Description": "The area of the circle or an error message."
+                    }
+                },
+                "Scope": "global"
+            },
+            "calculate_rectangle_area": {
+                "Description": "Calculates the area of a rectangle given its length and width. Returns an error message for negative inputs.",
+                "Parameters": {
+                    "length": {
+                        "Type": "float",
+                        "Description": "The length of the rectangle."
+                    },
+                    "width": {
+                        "Type": "float",
+                        "Description": "The width of the rectangle."
+                    }
+                },
+                "Return values": {
+                    "value": {
+                        "Type": "float or str",
+                        "Description": "The area of the rectangle or an error message."
+                    }
+                },
+                "Scope": "global"
+            },
+            "calculate_triangle_area": {
+                "Description": "Calculates the area of a triangle given its base and height. Returns an error message for negative inputs.",
+                "Parameters": {
+                    "base": {
+                        "Type": "float",
+                        "Description": "The base of the triangle."
+                    },
+                    "height": {
+                        "Type": "float",
+                        "Description": "The height of the triangle."
+                    }
+                },
+                "Return values": {
+                    "value": {
+                        "Type": "float or str",
+                        "Description": "The area of the triangle or an error message."
+                    }
+                },
+                "Scope": "global"
+            }
+        },
+        "Classes": {}
+    },
+    "Code7Correct.py": {
+        "File Name": "Code7Correct.py",
+        "Description": "This code file contains a 'Library' class that manages a collection of books. It supports functionalities to add books, borrow books, return books, and list all books available in the library.",
+        "Variables": {
+            "books": {
+                "Description": "A dictionary that stores information about the books in the library. Each key is the title of a book, and the value is another dictionary with 'author' and 'copies' as keys.",
+                "Type": "dict",
+                "Value": "{}",
+                "Scope": "instance"
+            }
+        },
+        "Functions": {},
+        "Classes": {
+            "Library": {
+                "Description": "A class that simulates the management of a library system including adding, borrowing, returning, and listing books.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes the Library with an empty collection of books.",
+                        "Parameters": {},
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "add_book": {
+                        "Description": "Adds a book to the library's collection. If the book already exists, increase the number of copies.",
+                        "Parameters": {
+                            "title": {
+                                "Name": "title",
+                                "Type": "str",
+                                "Description": "The title of the book to add."
+                            },
+                            "author": {
+                                "Name": "author",
+                                "Type": "str",
+                                "Description": "The author of the book."
+                            },
+                            "copies": {
+                                "Name": "copies",
+                                "Type": "int",
+                                "Description": "The number of copies of the book to add. Defaults to 1."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "borrow_book": {
+                        "Description": "Allows a user to borrow a book if it is available. Decreases the number of copies by one if the book is borrowed successfully.",
+                        "Parameters": {
+                            "title": {
+                                "Name": "title",
+                                "Type": "str",
+                                "Description": "The title of the book to borrow."
+                            }
+                        },
+                        "Return values": {
+                            "Name": {
+                                "Type": "str",
+                                "Description": "A message indicating if the book was borrowed or if it was not available."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "return_book": {
+                        "Description": "Returns a book to the library. Increases the number of copies by one. If the book doesn't exist, it adds it with an unknown author.",
+                        "Parameters": {
+                            "title": {
+                                "Name": "title",
+                                "Type": "str",
+                                "Description": "The title of the book to return."
+                            }
+                        },
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "list_books": {
+                        "Description": "Lists all the books available in the library with their authors and the number of copies.",
+                        "Parameters": {},
+                        "Return values": {
+                            "Name": {
+                                "Type": "str",
+                                "Description": "A formatted string with the list of all books and their details, or a message indicating no books are available."
+                            }
+                        },
+                        "Scope": "public"
+                    }
+                }
+            }
+        }
+    },
+    "Code1Correct.py": {
+        "File Name": "Code1Correct.py",
+        "Description": "This code defines a Math class with methods for basic arithmetic operations, such as addition, subtraction, multiplication, division, and exponentiation.",
+        "Variables": {},
+        "Functions": {},
+        "Classes": {
+            "Math": {
+                "Description": "A class that provides basic arithmetic operations.",
+                "Methods": {
+                    "__init__": {
+                        "Description": "Initializes an instance of the Math class.",
+                        "Parameters": {},
+                        "Return values": {},
+                        "Scope": "public"
+                    },
+                    "add": {
+                        "Description": "Adds two numbers together.",
+                        "Parameters": {
+                            "a": {
+                                "Name": "a",
+                                "Type": "number",
+                                "Description": "The first number to add."
+                            },
+                            "b": {
+                                "Name": "b",
+                                "Type": "number",
+                                "Description": "The second number to add."
+                            }
+                        },
+                        "Return values": {
+                            "result": {
+                                "Type": "number",
+                                "Description": "The sum of a and b."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "subtract": {
+                        "Description": "Subtracts the second number from the first.",
+                        "Parameters": {
+                            "a": {
+                                "Name": "a",
+                                "Type": "number",
+                                "Description": "The number to be subtracted from."
+                            },
+                            "b": {
+                                "Name": "b",
+                                "Type": "number",
+                                "Description": "The number to subtract."
+                            }
+                        },
+                        "Return values": {
+                            "result": {
+                                "Type": "number",
+                                "Description": "The difference of a and b."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "multiply": {
+                        "Description": "Multiplies two numbers.",
+                        "Parameters": {
+                            "a": {
+                                "Name": "a",
+                                "Type": "number",
+                                "Description": "The first number to multiply."
+                            },
+                            "b": {
+                                "Name": "b",
+                                "Type": "number",
+                                "Description": "The second number to multiply."
+                            }
+                        },
+                        "Return values": {
+                            "result": {
+                                "Type": "number",
+                                "Description": "The product of a and b."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "divide": {
+                        "Description": "Divides the first number by the second.",
+                        "Parameters": {
+                            "a": {
+                                "Name": "a",
+                                "Type": "number",
+                                "Description": "The dividend."
+                            },
+                            "b": {
+                                "Name": "b",
+                                "Type": "number",
+                                "Description": "The divisor."
+                            }
+                        },
+                        "Return values": {
+                            "result": {
+                                "Type": "number",
+                                "Description": "The quotient of a and b."
+                            }
+                        },
+                        "Scope": "public"
+                    },
+                    "power": {
+                        "Description": "Raises the first number to the power of the second.",
+                        "Parameters": {
+                            "a": {
+                                "Name": "a",
+                                "Type": "number",
+                                "Description": "The base number."
+                            },
+                            "b": {
+                                "Name": "b",
+                                "Type": "number",
+                                "Description": "The exponent."
+                            }
+                        },
+                        "Return values": {
+                            "result": {
+                                "Type": "number",
+                                "Description": "The result of a raised to the power of b."
+                            }
+                        },
+                        "Scope": "public"
+                    }
+                }
+            }
+        }
+    }
+}

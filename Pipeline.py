@@ -1,169 +1,397 @@
-'''
-This File contains the full pipeline for the project.
-'''
+"""
+This file contains the full pipeline for the project in a class-based format with split methods and detailed docstrings.
+"""
 
-# importing Models
+# Models
 from Models.MappingLLM import MappingLLM
 from Models.FinderLLM import FinderLLM
 from Models.DebuggerLLM import DebuggerLLM
+from Models.TesterLLM import TesterLLM
 
-# importing Libraries
+# Dependencies
 import time
 import threading
-import dotenv
 import os
 import json
-import subprocess
-import argparse
-from multiprocessing import Process
 import socket
+import subprocess
+import logging
+from queue import Queue
 
-# Socket as a Receiver
-email_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-slack_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Setting up the Models
-mapping_model = MappingLLM()
-finder_model = FinderLLM()
-debugger_model = DebuggerLLM()
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# CONSTANTS
-global CODE_MAPPINGS, CODE_FILE_NAMES, BUG_REPORTS, SLACK_REPORTS, EMAIL_REPORTS, SLACK_REPORT_IDs, EMAIL_REPORT_IDs 
-CODE_MAPPINGS = {}
-CODE_FILE_NAMES = set()
-BUG_REPORTS = []
-SLACK_REPORTS = {}
-EMAIL_REPORTS = {}
-SLACK_REPORT_IDs = set()
-EMAIL_REPORT_IDs = set()
+# Email and Slack Servers as threads using subprocess
+class EmailServer(threading.Thread):
+    def __init__(self):
+        super().__init__()
+        self.email_process = None
 
-# Functions for Code Mappings
-def fetch_code_mappings():
-    '''
-    Fetches the Code Mappings from the Json file.
-    '''
-    global CODE_MAPPINGS
-    global CODE_FILE_NAMES
-    with open("./Json/CodeMappings.json", "r") as json_file:
-        CODE_MAPPINGS = json.load(json_file)
-    for code_file in CODE_MAPPINGS.keys():
-        CODE_FILE_NAMES.add(code_file)
-    print("Code Mappings Fetched.")
+    def run(self):
+        """
+        Start the email server subprocess.
+        """
+        try:
+            self.email_process = subprocess.Popen(["python", "Tools/Email.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            self.email_process.wait()
+        except Exception as e:
+            logging.error(f"Error starting Email server: {e}")
 
-def check_and_update_code_mappings():
-    '''
-    Checks if the Code Mappings are updated (Just makes sure all files are included) or not.
-    If not, then updates the Code Mappings.
-    '''
-    global CODE_MAPPINGS
-    global CODE_FILE_NAMES
-    files = os.listdir("./Data/Buggy")
-    files = [file for file in files if file.endswith(".py")]
-    for filename in files:
-        if filename not in CODE_FILE_NAMES and filename != '__init__.py':
-            with open(f"./Data/Buggy/{filename}", "r") as file:
-                code = file.read()
-                print(f'adding {filename}\'s mapping')
-                response = mapping_model.infer(code)
-                if response != 'Error in Mapping':
-                    CODE_MAPPINGS[filename] = response
-                    CODE_FILE_NAMES.add(filename)
+
+class SlackServer(threading.Thread):
+    def __init__(self):
+        super().__init__()
+        self.slack_process = None
+
+    def run(self):
+        """
+        Start the Slack server subprocess.
+        """
+        try:
+            self.slack_process = subprocess.Popen(["python", "Tools/Slack.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            self.slack_process.wait()
+        except Exception as e:
+            logging.error(f"Error starting Slack server: {e}")
+
+
+class CodeMappingManager:
+    def __init__(self, buggy_code_dir="./Data/Buggy", correct_code_dir="./Data/Correct" ,mappings_file="./Json/CodeMappings.json", correct_mappings_file="./Json/CorrectCodeMappings.json"):
+        self.buggy_code_dir = buggy_code_dir
+        self.correct_code_dir = correct_code_dir
+        self.mappings_file = mappings_file
+        self.correct_mappings_file = correct_mappings_file
+        self.code_mappings = {}
+        self.code_file_names = set()
+        self.correct_code_mappings = {}
+        self.correct_code_file_names = set()
+        self.mapping_model = MappingLLM()
+
+    def fetch_code_mappings(self):
+        """
+        Load existing code mappings from the JSON file.
+        """
+        try:
+            with open(self.mappings_file, "r") as json_file:
+                self.code_mappings = json.load(json_file)
+            self.code_file_names.update(self.code_mappings.keys())
+            logging.info("Code Mappings Fetched.")
+        except FileNotFoundError:
+            self.code_mappings = {}
+            logging.info(f"No existing code mappings found at {self.mappings_file}. Starting fresh.")
+
+    def fetch_correct_code_mappings(self):
+        """
+        Load existing correct code mappings from the JSON file.
+        """
+        try:
+            with open(self.correct_mappings_file, "r") as json_file:
+                self.correct_code_mappings = json.load(json_file)
+            self.correct_code_file_names.update(self.correct_code_mappings.keys())
+            logging.info("Correct Code Mappings Fetched.")
+        except FileNotFoundError:
+            self.correct_code_mappings = {}
+            logging.info(f"No existing code mappings found at {self.correct_mappings_file}. Starting fresh.")
+            
+    def check_code_mappings(self):
+        """
+        Check for unmapped files in the buggy code directory.
+        :return: List of unmapped file names.
+        """
+        files = [f for f in os.listdir(self.buggy_code_dir) if f.endswith(".py") and f != "__init__.py"]
+        return [filename for filename in files if filename not in self.code_file_names]
+
+    def check_correct_code_mappings(self):
+        """
+        Check for unmapped files in the correct code directory.
+        :return: List of unmapped file names.
+        """
+        files = [f for f in os.listdir(self.correct_code_dir) if f.endswith(".py") and f != "__init__.py"]
+        return [filename for filename in files if filename not in self.correct_code_file_names]
+    
+    def update_code_mappings(self, unmapped_files):
+        """
+        Update the code mappings for newly discovered unmapped files.
+        """
+        for filename in unmapped_files:
+            file_path = os.path.join(self.buggy_code_dir, filename)
+            try:
+                with open(file_path, "r") as file:
+                    code = file.read()
+                logging.info(f"Mapping {filename}...")
+                response = self.mapping_model.infer(code)
+                if response != "Error in Mapping":
+                    self.code_mappings[filename] = response
+                    self.code_file_names.add(filename)
                 else:
-                    print(f"Error in Mapping: {filename}")
-    print("Code Mappings Updated.")
-    with open("./Json/CodeMappings.json", "w") as json_file:
-        json.dump(CODE_MAPPINGS, json_file, indent=4)
-    print("Code Mappings Saved.")
-    print("Filenames:\n", sorted(CODE_FILE_NAMES))
-
-# Functions for Bug Reports - Socket Programming
-def setup_email_socket():
-    '''
-    Sets up the Email Socket for receiving the Email Reports.
-    '''
-    try:
-        email_socket.bind(('127.0.0.1', 9001))  
-        email_socket.listen(5)
-        print("Email Socket Started!")
-    except Exception as e:
-        print(f"Error setting up Email socket: {e}")
-
-def setup_slack_socket():
-    '''
-    Sets up the Slack Socket for receiving the Slack Reports.
-    '''
-    try:
-        slack_socket.bind(('127.0.0.1', 9002))
-        slack_socket.listen(5)
-        print("Slack socket listening on port 9002!")
-    except Exception as e:
-        print(f"Error setting up Slack socket: {e}")
-
-def handle_incoming_email_connections():
-    '''
-    Handles the incoming Email Connections.
-    Sends the Email Reports to the receive_report function.
-    '''
-    while True:
-        client_socket, client_address = email_socket.accept()
-        email_data = client_socket.recv(1024).decode()
-        receive_report(email_data)
-        client_socket.close()
-
-def handle_incoming_slack_connections():
-    '''
-    Handles the incoming Slack Connections.
-    Sends the Slack Reports to the receive_report function.
-    '''
-    while True:
-        client_socket, client_address = slack_socket.accept()
-        slack_data = client_socket.recv(1024).decode()
-        receive_report(slack_data)
-        client_socket.close()
-
-def receive_report(report_data):
-    """
-    Adds the received report(s) to the appropriate dictionary (email or slack).
-    :param report_data: JSON string containing report(s) to be processed Key: reports, Value: List of reports
-    """
-    try:
-        reports = json.loads(report_data)
-        for report in reports['reports']:
-            reportID = report['reportID']
-            if reportID not in SLACK_REPORT_IDs and reportID not in EMAIL_REPORT_IDs:
-                if 'from' in report:
-                    EMAIL_REPORTS[reportID] = report
-                    EMAIL_REPORT_IDs.add(reportID)
-                    print(f"Processing email report: {reportID}")
-                elif 'user_id' in report:
-                    SLACK_REPORTS[reportID] = report
-                    SLACK_REPORT_IDs.add(reportID)
-                    print(f"Processing slack report: {reportID}")
-                else:
-                    print(f"Invalid report")
-            else:
-                print(f"ReportID already processed: {reportID}")
-    except Exception as e:
-        print(f"Error processing report: {e}")
+                    logging.error(f"Error mapping {filename}")
+            except Exception as e:
+                logging.error(f"Error reading or mapping {filename}: {e}")
+        self.save_mappings()
         
-def start_email_server():
-    '''
-    Starts the Email Server.
-    '''
-    setup_email_socket()
-    handle_incoming_email_connections()
+    def update_correct_code_mappings(self, unmapped_files):
+        """
+        Update the correct code mappings for newly discovered unmapped files.
+        """
+        for filename in unmapped_files:
+            file_path = os.path.join(self.correct_code_dir, filename)
+            try:
+                with open(file_path, "r") as file:
+                    code = file.read()
+                logging.info(f"Mapping {filename}...")
+                response = self.mapping_model.infer(code)
+                if response != "Error in Mapping":
+                    self.correct_code_mappings[filename] = response
+                    self.correct_code_file_names.add(filename)
+                else:
+                    logging.error(f"Error mapping {filename}")
+            except Exception as e:
+                logging.error(f"Error reading or mapping {filename}: {e}")
+        self.save_correct_mappings()
 
-def start_slack_server():
-    '''
-    Starts the Slack Server.
-    '''
-    setup_slack_socket()
-    handle_incoming_slack_connections()
+    def save_mappings(self):
+        """
+        Save the updated code mappings back to the JSON file.
+        """
+        try:
+            with open(self.mappings_file, "w") as json_file:
+                json.dump(self.code_mappings, json_file, indent=4)
+            logging.info("Code Mappings Saved.")
+        except Exception as e:
+            logging.error(f"Error saving code mappings: {e}")
+            
+    def save_correct_mappings(self):
+        """
+        Save the updated correct code mappings back to the JSON file.
+        """
+        try:
+            with open(self.correct_mappings_file, "w") as json_file:
+                json.dump(self.correct_code_mappings, json_file, indent=4)
+            logging.info("Correct Code Mappings Saved.")
+        except Exception as e:
+            logging.error(f"Error saving correct code mappings: {e}")
+
+
+class BugReportServer(threading.Thread):
+    def __init__(self, email_port=9001, slack_port=9002):
+        super().__init__()
+        self.email_port = email_port
+        self.slack_port = slack_port
+        self.email_socket = None
+        self.slack_socket = None
+        self.slack_reports = Queue()
+        self.email_reports = Queue()
+        self.slack_report_ids = set()
+        self.email_report_ids = set()
+        self.lock = threading.Lock()
+
+    def setup_socket(self, port):
+        """
+        Configures a socket to listen for incoming connections.
+        :param port: The port on which the socket should listen.
+        :return: The configured socket object.
+        """
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.bind(("127.0.0.1", port))
+            sock.listen(5)
+            logging.info(f"Socket listening on port {port}!")
+            return sock
+        except Exception as e:
+            logging.error(f"Error setting up socket on port {port}: {e}")
+            return None
+
+    def handle_connections(self, sock, report_storage, report_ids):
+        """
+        Handles incoming connections for a given socket.
+        """
+        if not sock:
+            logging.warning("Socket is not initialized; skipping connection handling.")
+            return
+
+        while True:
+            try:
+                client_socket, _ = sock.accept()
+                data = client_socket.recv(1024).decode()
+                self.process_report(data, report_storage, report_ids)
+                client_socket.close()
+            except Exception as e:
+                logging.error(f"Error during connection handling: {e}")
+
+    def process_report(self, report_data, report_storage, report_ids):
+        """
+        Processes incoming report data.
+        """
+        try:
+            reports = json.loads(report_data)
+            with self.lock:
+                for report in reports.get("reports", []):
+                    report_id = report.get("reportID")
+                    if report_id and report_id not in report_ids:
+                        report_storage.put(report)
+                        report_ids.add(report_id)
+                        logging.info(f"Processed report: {report_id}")
+                    else:
+                        logging.warning(f"Duplicate or invalid report: {report_id}")
+        except Exception as e:
+            logging.error(f"Error processing report: {e}")
+
+    def run(self):
+        """
+        Starts the BugReportServer threads for handling email and Slack connections.
+        """
+        self.email_socket = self.setup_socket(self.email_port)
+        self.slack_socket = self.setup_socket(self.slack_port)
+
+        if self.email_socket:
+            email_thread = threading.Thread(target=self.handle_connections, args=(self.email_socket, self.email_reports, self.email_report_ids))
+            email_thread.start()
+        else:
+            logging.error("Email server setup failed; skipping.")
+
+        if self.slack_socket:
+            slack_thread = threading.Thread(target=self.handle_connections, args=(self.slack_socket, self.slack_reports, self.slack_report_ids))
+            slack_thread.start()
+        else:
+            logging.error("Slack server setup failed; skipping.")
+
+
+class ReportResolver(threading.Thread):
+    def __init__(self, bug_server, code_mapping_manager):
+        super().__init__()
+        self.bug_server = bug_server
+        self.code_mapping_manager = code_mapping_manager
+        self.finder_model = FinderLLM()
+        self.debugger_model = DebuggerLLM()
+        self.tester_model = TesterLLM()
+        self.resolved_reports = {}
+
+    def resolve_reports(self):
+        """
+        Periodically resolve bug reports using FinderLLM and DebuggerLLM.
+        """
+        while True:
+            reports = []
+            while not self.bug_server.email_reports.empty():
+                reports.append(self.bug_server.email_reports.get())
+            while not self.bug_server.slack_reports.empty():
+                reports.append(self.bug_server.slack_reports.get())
+
+            for report in reports:
+                start_time = time.time()
+                report_id = report['reportID']
+                bug_report = report['text']
+                code_mapping = self.code_mapping_manager.code_mappings
+                correct_code_mapping = self.code_mapping_manager.correct_code_mappings
+                try:
+                    logging.info(f'Resolving bug report {report_id}...')
+                    self.finder_model.set_code_mappings(code_mapping)
+                    code_filename = self.finder_model.find_code_filename(bug_report)
+                    code_file = ''
+                    if 'Finding' in code_filename.keys():
+                        logging.error(f"FinderLLM Commented out")
+                        continue
+                    elif code_filename['Filename'] not in os.listdir("./Data/Buggy"):
+                        logging.error(f"Code file {code_filename['Filename']} not found.")
+                        continue
+                    else:
+                        logging.info(f"Code file found: {code_filename['Filename']}")
+                        with open(f"./Data/Buggy/{code_filename['Filename']}", "r") as file:
+                            code_file = file.read()
+                    debugged_code = self.debugger_model.debug(bug_report, code_file)
+                    if 'Debugging' in debugged_code.keys():
+                        logging.error(f"DebuggerLLM Commented out")
+                        continue
+                    elif 'Corrected_code_file' in debugged_code.keys():
+                        Resolved = False
+                        tries = 0
+                        efforts = {'Try 1': debugged_code['Corrected_code_file']}
+                        while not Resolved and tries < 3:
+                            response = self.tester_model.evaluate(bug_report, correct_code_mapping[code_filename['Filename'].replace('Buggy', 'Correct')], debugged_code['Corrected_code_file'])
+                            if 'true' in response.lower():
+                                Resolved = True
+                            else:
+                                debugged_code = self.debugger_model.debug(bug_report, debugged_code['Corrected_code_file'])
+                                efforts[f'Try {tries+2}'] = debugged_code['Corrected_code_file']
+                                tries += 1
+                        resolved_report = {
+                            'status': 'Resolved' if Resolved else 'Unresolved',
+                            'efforts': efforts,
+                            'tries': tries,
+                            'reportID': report_id,
+                            'bug_report': bug_report,
+                            'code_file': code_file,
+                            'debugged_code': debugged_code['Corrected_code_file'],
+                            'reasoning': code_filename['Reasoning'],
+                            'confidence': code_filename['Confidence'],
+                            'start_time': start_time,
+                            'end_time': time.time(),
+                            'reporting_time': report['timestamp']
+                        }
+                        if Resolved:
+                            logging.info(f"Resolved {report_id} successfully. Changing code file {code_filename['Filename']}")
+                        else:
+                            logging.error(f"Failed to resolve {report_id}.")
+                        with self.bug_server.lock:
+                            self.resolved_reports[report_id] = resolved_report
+                        with open(f"./Data/Buggy/{code_filename['Filename']}", "w") as file:
+                            file.write(debugged_code['Corrected_code_file'])
+                        self.resolved_reports[report_id] = resolved_report
+                except Exception as e:
+                    logging.error(f"Error resolving report {report_id}: {e}")
+            self.save_resolved_reports()
+            time.sleep(10)
+    
+    def save_resolved_reports(self):
+        """
+        Save the resolved reports to a JSON file.
+        """
+        try:
+            with open("./Json/ResolvedReports.json", "w") as json_file:
+                json.dump(self.resolved_reports, json_file, indent=4)
+            logging.info("Resolved Reports Saved.")
+        except Exception as e:
+            logging.error(f"Error saving resolved reports: {e}")
+            
+    def fetch_resolved_reports(self):
+        """
+        Load existing resolved reports from the JSON file.
+        """
+        try:
+            with open("./Json/ResolvedReports.json", "r") as json_file:
+                self.resolved_reports = json.load(json_file)
+            logging.info("Resolved Reports Fetched.")
+        except FileNotFoundError:
+            self.resolved_reports = {}
+            logging.info("No existing resolved reports found. Starting fresh.")
+
+    def run(self):
+        """
+        Start the report resolver thread.
+        """
+        self.fetch_resolved_reports()
+        self.resolve_reports()
 
 if __name__ == "__main__":
-    email_thread = threading.Thread(target=start_email_server)
-    slack_thread = threading.Thread(target=start_slack_server)
-    email_thread.start()
-    slack_thread.start()
-    email_thread.join()
-    slack_thread.join()
+    email_server = EmailServer()
+    slack_server = SlackServer()
+    email_server.start()
+    slack_server.start()
+
+    code_mapping_manager = CodeMappingManager()
+    bug_server = BugReportServer()
+    resolver = ReportResolver(bug_server, code_mapping_manager)
+
+    code_mapping_manager.fetch_code_mappings()
+    code_mapping_manager.fetch_correct_code_mappings()
+    unmapped_files = code_mapping_manager.check_code_mappings()
+    correct_unmapped_files = code_mapping_manager.check_correct_code_mappings()
+    code_mapping_manager.update_code_mappings(unmapped_files)
+    code_mapping_manager.update_correct_code_mappings(correct_unmapped_files)
+    bug_server.start()
+    resolver.start()
+
+    email_server.join()
+    slack_server.join()
+    bug_server.join()
+    resolver.join()

@@ -2,7 +2,7 @@
 This Contains the Mapping LLM Model for the project.
 
 Task: This model is used to map the code files name to code file descriptions.
-Model: OpenAI GPT-4
+Model: OpenAI GPT-4o
 Output: JSON Object with all function names and their descriptions.
 '''
 
@@ -14,11 +14,11 @@ from json import loads, dumps
 
 # Model Class
 class MappingLLM():
-    def __init__(self, choice = 'GPT-4'):
+    def __init__(self, choice = 'GPT-4o'):
         self.API_KEY = None
         self.model = None
         self.choice = choice
-        if self.choice == 'GPT-4':
+        if self.choice == 'GPT-4o':
             self.API_KEY = dotenv.get_key('.env', 'OPENAI_API_KEY')
             self.model = OpenAI(api_key = self.API_KEY)
         self.prompt = """
@@ -42,7 +42,7 @@ class MappingLLM():
         -- End of Code --
         
         -- Expected Response --
-        JSON Object:
+        JSON Object (DO NOT ADD ```json ... ```):
         Level 1 Fields: File Name (EXACT NAME NOTHING ELSE), Description, Variables (Internal JSON Object NOT ARRAY), Functions (Internal JSON Object NOT ARRAY), Classes (Internal JSON Object NOT ARRAY)
         Level 2 Fields: Variable Name (Internal JSON Object), Function Name (Internal JSON Object), Class Name (Internal JSON Object)
         Level 3 Fields For Variables: Description, Type, Value, Scope
@@ -69,29 +69,29 @@ class MappingLLM():
         self.response = None
     
     def infer(self, code):
-        # try:
-        #     if self.choice == 'GPT-4':
-        #         self.response = self.model.chat.completions.create(
-        #             model = 'gpt-4o-mini',
-        #             messages = [
-        #                 {
-        #                     'role': 'system',
-        #                     'content': 'You are a helpful AI.'
-        #                 },
-        #                 {
-        #                     'role': 'user',
-        #                     'content': self.prompt.format(Code = code).strip()
-        #                 }
-        #             ]
-        #         )
-        #         return loads(self.response.choices[0].message.content)
-        #         # return self.response.choices[0].message.content
-        # except Exception as e:
-        #     print('Error in Mapping', e)
-        #     return 'Error in Mapping'
-        return {'Inference': 'Imagine this is the response from the model.'}
+        try:
+            if self.choice == 'GPT-4o':
+                self.response = self.model.chat.completions.create(
+                    model = 'gpt-4o',
+                    messages = [
+                        {
+                            'role': 'system',
+                            'content': 'You are a helpful AI.'
+                        },
+                        {
+                            'role': 'user',
+                            'content': self.prompt.format(Code = code).strip()
+                        }
+                    ]
+                )
+                return loads(self.response.choices[0].message.content)
+                # return self.response.choices[0].message.content
+        except Exception as e:
+            print('Error in Mapping', e)
+            return 'Error in Mapping'
+        # return {'Inference': 'Imagine this is the response from the model.'}
     
     def get_last_response(self):
         return loads(self.response.choices[0].message.content)
         # return self.response.choices[0].message.content
-        return {'Inference': 'Imagine this is the response from the model.'}
+        # return {'Inference': 'Imagine this is the response from the model.'}

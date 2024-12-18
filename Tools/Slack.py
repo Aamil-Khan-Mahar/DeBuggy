@@ -8,7 +8,7 @@ from json import dumps, loads
 import time
 
 class SlackListener:
-    def __init__(self, env_path: str = "../.env", port: int = 8000):
+    def __init__(self, env_path: str = "../.env", port: int = 8005):
         """
         Initialize the SlackListener.
 
@@ -18,7 +18,7 @@ class SlackListener:
         self.slack_token = dotenv.get_key(env_path, "SLACK_TOKEN")
         self.signing_secret = dotenv.get_key(env_path, "SLACK_SIGNING_SECRET")
         self.port = port
-        self.reportID = 1 
+        self.reportID = int(dotenv.get_key(env_path, 'SLACK_REPORT_ID', default=1))
         if not self.slack_token or not self.signing_secret:
             raise ValueError("Slack credentials (SLACK_TOKEN or SLACK_SIGNING_SECRET) are missing.")
         self.app = Flask(__name__)
@@ -53,6 +53,7 @@ class SlackListener:
             self.reports.append(report)
             self.new_reports.append(report)
             self.reportID += 1
+            dotenv.set_key('.env', 'SLACK_REPORT_ID', str(self.reportID))
             
     def get_messages(self):
         """
@@ -98,5 +99,5 @@ class SlackListener:
             time.sleep(5)
             
 if __name__ == '__main__':
-    slack_listener = SlackListener()
+    slack_listener = SlackListener(env_path='.env')
     slack_listener.start()
