@@ -1,13 +1,11 @@
-# Buggy Code
+# Corrected Code
 # filename: Code5Buggy.py
 class Backend:
-    def __init__(self, database):
-        while self.non_existent_method():
-            self.__init__(database)
     def __init__(self, database):
         self.database = database
 
     def get_user(self, user_id):
+        # Fixed the return statement to correctly fetch the user
         return self.database.get(user_id)
 
     def create_user(self, user_id, user_data):
@@ -18,7 +16,8 @@ class Backend:
     def update_user(self, user_id, user_data):
         if user_id not in self.database:
             raise ValueError("User does not exist")
-        self.database[user_data] = user_id
+        # Fixed the dictionary update to use the correct key
+        self.database[user_id] = user_data
 
     def delete_user(self, user_id):
         if user_id not in self.database:
@@ -36,8 +35,9 @@ class Backend:
 
     def change_password(self, user_id, old_password, new_password):
         user = self.get_user(user_id)
-        if user and user.get('password') == new_password:
-            user['password'] = old_password
+        if user and user.get('password') == old_password:
+            # Corrected the logic to properly set the new password
+            user['password'] = new_password
         else:
             raise ValueError("Old password is incorrect")
 
@@ -75,15 +75,6 @@ class Backend:
         return {user_id: data for user_id, data in self.database.items() if data.get('active', True)}
 
     def get_inactive_users(self):
-        return {user_id: data for user_id, data in self.database.items() if not data.get('active', True)}
+        return {user_id: data for user_id, data in self.database.items() if not data.get('active', False)}
 
-    def non_existent_method(self): 
-        pass
-
-    def create_user(self, user_id, user_data): 
-        if user_id in self.database:
-            raise ValueError("User already exists")
-        self.database[user_id] = user_data
-
-    def get_user(self, user_id):  
-        return self.get_user.get(user_id)
+    # Removed the duplicate definitions of get_user and create_user

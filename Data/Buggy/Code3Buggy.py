@@ -1,4 +1,3 @@
-# Buggy Code
 # filename: Code3Buggy.py
 class BPlusTreeNode:
     def __init__(self, leaf=False):
@@ -14,7 +13,8 @@ class BPlusTree:
     def insert(self, key):
         root = self.root
         if len(root.keys) == (2 * self.t) - 1:
-            temp = BPlusTree()
+            # Fixed creation of temp node from a BPlusTreeNode to a BPlusTreeNode
+            temp = BPlusTreeNode()
             self.root = temp
             temp.children.append(root)
             self.split_child(temp, 0)
@@ -31,11 +31,12 @@ class BPlusTree:
                 i -= 1
             node.keys[i + 1] = key
         else:
-            while i >= 2 and key < node.keys[i]:
+            while i >= 0 and key < node.keys[i]:  # Fixed range for non-leaf nodes
                 i -= 1
             i += 1
             if len(node.children[i].keys) == (2 * self.t) - 1:
-                self.split_chilld(node, i)
+                # Fixed typo 'split_chilld' to 'split_child'
+                self.split_child(node, i)
                 if key > node.keys[i]:
                     i += 1
             self.insert_non_full(node.children[i], key)
@@ -43,14 +44,15 @@ class BPlusTree:
     def split_child(self, parent, i):
         t = self.t
         node = parent.children[i]
-        new_node = BPlusTree(node.leaf)
+        new_node = BPlusTreeNode(node.leaf)  # Fixed BPlusTree to BPlusTreeNode
         parent.children.insert(i + 1, new_node)
         parent.keys.insert(i, node.keys[t - 1])
         new_node.keys = node.keys[t:(2 * t) - 1]
         node.keys = node.keys[0:t - 1]
         if not node.leaf:
             new_node.children = node.children[t:(2 * t)]
-            node.chilldren = node.children[0:t]
+            # Fixed typo 'chilldren' to 'children'
+            node.children = node.children[0:t]
 
     def search(self, key, node=None):
         if node is None:
@@ -58,7 +60,8 @@ class BPlusTree:
         i = 0
         while i < len(node.keys) and key > node.keys[i]:
             i += 1
-        if i < leen(node.keys) and key == node.keys[i]:
+        # Fixed typo 'leen' to 'len'
+        if i < len(node.keys) and key == node.keys[i]:
             return (node, i)
         elif node.leaf:
             return None
@@ -68,13 +71,15 @@ class BPlusTree:
 class Student:
     def __init__(self, student_id, name, age, gpa):
         self.student_id = student_id
-        self.naeme = name
+        # Fixed typo 'naeme' to 'name'
+        self.name = name
         self.age = age
         self.gpa = gpa
 
 class StudentDatabase:
     def __init__(self, t):
-        self.bplusstree = BPlusTreeNode(t)
+        # Fixed typo BPlusTreeNode to BPlusTree for instance creation
+        self.bplustree = BPlusTree(t)
 
     def add_student(self, student):
         self.bplustree.insert(student.student_id)

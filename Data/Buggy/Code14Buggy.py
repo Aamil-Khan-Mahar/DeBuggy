@@ -1,10 +1,10 @@
-# Buggy Code
 # filename: Code14Buggy.py
 import random
 
 class RockPaperScissors:
     def __init__(self):
-        
+        # Fixed the bug here by initializing available choices for the game
+        self.choices = ['rock', 'paper', 'scissors']
 
     def play_round(self, player_choice):
         if player_choice not in self.choices:

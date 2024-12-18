@@ -3,7 +3,7 @@ This Contains the Tester LLM Model for the project.
 
 Task: This model is given the code file that is provided by the DebuggerLLM model and the bug report that was received from a user along with the code mappings that were provided by the MappingLLM model for the Correct Code. It also creates new code mapping first for the new code file that was received from the DebuggerLLM model, and then it compares the new code mappings with the existing code mappings to see if the workings of the code file have changed.
 Model: OpenAI GPT-4o
-Output: True or False
+Output: JSON Object
 """
 
 # Dependencies
@@ -46,8 +46,10 @@ class TesterLLM():
         </new_code_file>
         
         -- Expected Response --
-        Return True if the workings of the New Code File are the same as the Correct Code, else return False.
-        ONLY RETURN True or False No explanations are needed.
+        DO NOT ADD ```json ... ``` around the response.
+        JSON Object with the following key-value pair:
+        'Evaluation': 'True' or 'False'
+        'Reason': 'The reason for the evaluation.'
         -- End of Expected Response --
         
         Response:
@@ -78,12 +80,12 @@ class TesterLLM():
                         }
                     ]
                 )
-                return self.response.choices[0].message.content
+                return loads(self.response.choices[0].message.content), self.code_mapping_new
         except Exception as e:
             print(f'Error in Evaluation: {e}')
             return 'Error in Evaluation'
         # return {'Evaluation': 'Imagine this is the response from the model.'}
         
     def get_last_response(self):
-        return self.response.choices[0].message.content
+        return loads(self.response.choices[0].message.content), self.code_mapping_new
         # return {'Evaluation': 'Imagine this is the response from the model.'}

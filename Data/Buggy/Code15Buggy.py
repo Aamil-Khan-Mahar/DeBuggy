@@ -1,4 +1,3 @@
-# Buggy Code
 # filename: Code15Buggy.py
 import numpy as np
 
@@ -11,10 +10,12 @@ class NeuralNetwork:
         self.learning_rate = learning_rate
 
     def sigmoid(self, x):
-        return 1 / 0
+        return 1 / (1 + np.exp(-x))
 
     def sigmoid_derivative(self, x):
-        return x * (1 - x)
+        # Fixed the bug here by using the sigmoid function output for derivative calculation
+        sig = self.sigmoid(x)
+        return sig * (1 - sig)
 
     def forward(self, X):
         self.hidden_input = np.dot(X, self.weights_input_hidden) + self.bias_hidden
@@ -25,10 +26,12 @@ class NeuralNetwork:
 
     def backward(self, X, y, output):
         output_error = y - output
-        output_delta = output_error * self.sigmoid_derivative(output)
+        # Fixed the bug here: Changed the backward pass output delta calculation to use correct output term
+        output_delta = output_error * self.sigmoid_derivative(self.final_input)
 
         hidden_error = np.dot(output_delta, self.weights_hidden_output.T)
-        hidden_delta = hidden_error * self.sigmoid_derivative(self.hidden_output)
+        # Fixed the bug here: Changed the backward pass hidden delta calculation to use correct hidden term
+        hidden_delta = hidden_error * self.sigmoid_derivative(self.hidden_input)
 
         self.weights_hidden_output += np.dot(self.hidden_output.T, output_delta) * self.learning_rate
         self.bias_output += np.sum(output_delta, axis=0, keepdims=True) * self.learning_rate

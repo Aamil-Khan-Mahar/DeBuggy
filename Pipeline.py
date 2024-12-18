@@ -33,7 +33,7 @@ class EmailServer(threading.Thread):
         Start the email server subprocess.
         """
         try:
-            self.email_process = subprocess.Popen(["python", "Tools/Email.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            self.email_process = subprocess.Popen(["python", "Tools/Email.py"], stdout=subprocess.DEVNULL)
             self.email_process.wait()
         except Exception as e:
             logging.error(f"Error starting Email server: {e}")
@@ -49,7 +49,7 @@ class SlackServer(threading.Thread):
         Start the Slack server subprocess.
         """
         try:
-            self.slack_process = subprocess.Popen(["python", "Tools/Slack.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            self.slack_process = subprocess.Popen(["python", "Tools/Slack.py"], stdout=subprocess.DEVNULL)
             self.slack_process.wait()
         except Exception as e:
             logging.error(f"Error starting Slack server: {e}")
@@ -173,7 +173,7 @@ class CodeMappingManager:
 
 
 class BugReportServer(threading.Thread):
-    def __init__(self, email_port=9001, slack_port=9002):
+    def __init__(self, email_port=4091, slack_port=4090):
         super().__init__()
         self.email_port = email_port
         self.slack_port = slack_port
@@ -276,7 +276,7 @@ class ReportResolver(threading.Thread):
                 reports.append(self.bug_server.email_reports.get())
             while not self.bug_server.slack_reports.empty():
                 reports.append(self.bug_server.slack_reports.get())
-
+            updated = False
             for report in reports:
                 start_time = time.time()
                 report_id = report['reportID']
@@ -305,17 +305,22 @@ class ReportResolver(threading.Thread):
                     elif 'Corrected_code_file' in debugged_code.keys():
                         Resolved = False
                         tries = 0
-                        efforts = {'Try 1': debugged_code['Corrected_code_file']}
+                        efforts = {}
                         while not Resolved and tries < 3:
-                            response = self.tester_model.evaluate(bug_report, correct_code_mapping[code_filename['Filename'].replace('Buggy', 'Correct')], debugged_code['Corrected_code_file'])
-                            if 'true' in response.lower():
+                            response, new_code_mapping = self.tester_model.evaluate(bug_report, correct_code_mapping[code_filename['Filename'].replace('Buggy', 'Correct')], debugged_code['Corrected_code_file'])
+                            efforts['Try ' + str(tries + 1)] = { 'Evaluation': response['Evaluation'], 'Reason': response['Reason'] , 'Code': debugged_code['Corrected_code_file']}
+                            if 'true' in response['Evaluation'].lower():
                                 Resolved = True
+                                self.code_mapping_manager.code_mappings[code_filename['Filename']] = new_code_mapping
+                                self.code_mapping_manager.save_mappings()
                             else:
+                                if tries == 2:
+                                    continue 
                                 debugged_code = self.debugger_model.debug(bug_report, debugged_code['Corrected_code_file'])
-                                efforts[f'Try {tries+2}'] = debugged_code['Corrected_code_file']
                                 tries += 1
                         resolved_report = {
                             'status': 'Resolved' if Resolved else 'Unresolved',
+                            'evaluation_reason': response['Reason'],
                             'efforts': efforts,
                             'tries': tries,
                             'reportID': report_id,
@@ -330,16 +335,18 @@ class ReportResolver(threading.Thread):
                         }
                         if Resolved:
                             logging.info(f"Resolved {report_id} successfully. Changing code file {code_filename['Filename']}")
+                            with open(f"./Data/Buggy/{code_filename['Filename']}", "w") as file:
+                                file.write(debugged_code['Corrected_code_file'])
                         else:
                             logging.error(f"Failed to resolve {report_id}.")
                         with self.bug_server.lock:
                             self.resolved_reports[report_id] = resolved_report
-                        with open(f"./Data/Buggy/{code_filename['Filename']}", "w") as file:
-                            file.write(debugged_code['Corrected_code_file'])
-                        self.resolved_reports[report_id] = resolved_report
+                        updated = True
                 except Exception as e:
                     logging.error(f"Error resolving report {report_id}: {e}")
-            self.save_resolved_reports()
+            if updated:
+                self.save_resolved_reports()
+            updated = False
             time.sleep(10)
     
     def save_resolved_reports(self):

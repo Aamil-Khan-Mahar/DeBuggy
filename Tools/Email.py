@@ -14,7 +14,7 @@ class EmailListener:
         """
         self.reports = []
         self.new_reports = []
-        self.reportID = int(dotenv.get_key(env_path, 'EMAIL_REPORT_ID', default=1))
+        self.reportID = 12
         self.email = dotenv.get_key(env_path, 'EMAIL')
         self.password = dotenv.get_key(env_path, 'APP_PASS')
         self.folder = folder
@@ -53,7 +53,6 @@ class EmailListener:
             self.new_reports.append(report)
             self.seen_uids.add(msg.uid)
             self.reportID += 1
-            dotenv.set_key('.env', 'EMAIL_REPORT_ID', str(self.reportID))
         if len(self.new_reports) > 0:
             self.send_reports_to_receiver()
 
@@ -67,7 +66,7 @@ class EmailListener:
             }
             reports_str = dumps(reports_data)
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.socket.connect(('127.0.0.1', 9001))
+            self.socket.connect(('127.0.0.1', 4091))
             self.socket.sendall(reports_str.encode())
             self.new_reports = []
             self.socket.close()

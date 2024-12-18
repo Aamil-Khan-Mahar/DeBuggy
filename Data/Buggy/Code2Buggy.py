@@ -1,4 +1,3 @@
-# Buggy code
 # filename: Code2Buggy.py
 class FlightTracker():
     def __init__(self, flights):
@@ -13,12 +12,14 @@ class FlightTracker():
         self.flights_planes = flights['planes']
         self.flights_seats = flights['seats']
         self.flights_classes = flights['classes']
-        self.flight_passengers = flights['assengers']
+        # Fixed the bug here by correcting the key from 'assengers' to 'passengers'
+        self.flights_passengers = flights['passengers']
         self.flight_status = flights['status']
         self.flight_captain = flights['captain']
     
     def get_flight_numbers(self):
-        retur self.flights_number
+        # Fixed the bug here by correcting the spelling of 'return'
+        return self.flights_numbers
     
     def get_flight_origins(self):
         return self.flights_origins
@@ -51,7 +52,8 @@ class FlightTracker():
         return self.flights_classes
     
     def get_flight_passengers(self):
-        return self.flight_passenger
+        # Fixed the bug here by adding 's' to 'flight_passenger'
+        return self.flights_passengers
     
     def get_flight_status(self):
         return self.flight_status
@@ -72,7 +74,8 @@ class FlightTracker():
         return min(self.flights_durations) if self.flights_durations else 0
     
     def get_total_passengers(self):
-        return sum(self.flight_passengers)
+        # Fixed the bug here by accessing 'flights_passengers' instead of 'flight_passenger'
+        return sum(self.flights_passengers)
     
     def get_flights_by_airline(self, airline):
         return [i for i, a in enumerate(self.flights_airlines) if a == airline]

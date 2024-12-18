@@ -18,7 +18,7 @@ class SlackListener:
         self.slack_token = dotenv.get_key(env_path, "SLACK_TOKEN")
         self.signing_secret = dotenv.get_key(env_path, "SLACK_SIGNING_SECRET")
         self.port = port
-        self.reportID = int(dotenv.get_key(env_path, 'SLACK_REPORT_ID', default=1))
+        self.reportID = 1
         if not self.slack_token or not self.signing_secret:
             raise ValueError("Slack credentials (SLACK_TOKEN or SLACK_SIGNING_SECRET) are missing.")
         self.app = Flask(__name__)
@@ -53,7 +53,6 @@ class SlackListener:
             self.reports.append(report)
             self.new_reports.append(report)
             self.reportID += 1
-            dotenv.set_key('.env', 'SLACK_REPORT_ID', str(self.reportID))
             
     def get_messages(self):
         """
@@ -75,7 +74,7 @@ class SlackListener:
             }
             reports_str = dumps(reports_data)
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client_socket.connect(('127.0.0.1', 9002))
+            client_socket.connect(('127.0.0.1', 4090))
             client_socket.sendall(reports_str.encode())  
             self.new_reports = []
             client_socket.close()  

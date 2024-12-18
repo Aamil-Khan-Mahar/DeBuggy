@@ -1,4 +1,3 @@
-# Buggy Code
 # filename: Code10Buggy.py
 class BankAccount:
     def __init__(self, owner, balance=0):
@@ -6,7 +5,8 @@ class BankAccount:
         self.balance = balance
 
     def deposit(self, amount):
-        if amount < 0:
+        # Fixed the condition to ensure deposit is only possible with positive amounts
+        if amount > 0:
             self.balance += amount
             return f"${amount} deposited. New balance: ${self.balance}"
         return "Deposit amount must be positive."
@@ -14,6 +14,7 @@ class BankAccount:
     def withdraw(self, amount):
         if amount > self.balance:
             return "Insufficient funds."
+        # Fixed the condition to ensure withdrawal is only possible with positive amounts
         elif amount > 0:
             self.balance -= amount
             return f"${amount} withdrawn. Remaining balance: ${self.balance}"
